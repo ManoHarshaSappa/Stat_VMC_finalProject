@@ -8,10 +8,10 @@ website:
     left: 
     
     - Home.qmd
-    - Dataset Description.qmd
+    - Project Details.qmd
     - Research Design.qmd
     - Final Project.qmd
-    - Concluding Thoughts.qmd
+    - Conclusion.qmd
 
 format: 
   html: 

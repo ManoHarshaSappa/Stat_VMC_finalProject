@@ -474,6 +474,8 @@ map
 **Explanation of the Code:** This utilizes the Leaflet package in R to generate an interactive map. It begins by loading Leaflet and then initializes a map object. Using latitude and longitude data from a dataframe named 'data', it places circle markers on the map to represent specific locations, like crash sites. Each marker includes a popup and label showing the associated report number. Finally, it prints the interactive map, allowing users to explore the locations and corresponding report numbers within the R environment.
 :::
 
+<details>
+<summary>Per1 Code</summary>
 ## Per#1: Can we predict the severity of injuries based on various factors such as weather conditions, road surface conditions, and collision type?
 
 #### Fit random forest model
@@ -508,9 +510,6 @@ map
 
 ![](images/7.png)
 
-<details>
-
-<summary>Code</summary>
 
 ```{r,message = FALSE}
 #select_cols=c('Weather','Surface.Condition','Collision.Type','Injury.Severity')
@@ -614,7 +613,6 @@ map
 #varImpPlot(rmodel)
 ```
 
-</details>
 
 ::: {style="text-align:justify"}
 **Interpretation of Results**: The question aims to predict the severity of injuries resulting from collisions based on various factors such as weather conditions, road surface conditions, and collision types. The output is from a random forest classification model trained on a dataset (train_data). The model's accuracy is approximately 80.69%, indicating its ability to predict injury severity.
@@ -625,3 +623,5 @@ The confusion matrix reveals the number of correct and incorrect predictions for
 
 Overall, the output suggests that weather conditions, road surface conditions, and collision types are significant factors in predicting the severity of injuries resulting from collisions, with "Collision.Type" being the most important predictor.
 :::
+
+</details>
