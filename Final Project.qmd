@@ -12,6 +12,7 @@ output:
 
 ## What is Project based on?
 
+
 ::: {style="text-align:justify"}
 Our project revolves around a thorough examination of a dataset documenting motor vehicle collisions on county and local roadways within Montgomery County, Maryland. This dataset serves as the cornerstone for our investigation into the myriad factors that influence traffic accidents and their consequences. Through meticulous analysis and advanced statistical techniques, we aim to uncover insightful patterns and correlations that can inform proactive measures for enhancing road safety and mitigating accident risks.
 
