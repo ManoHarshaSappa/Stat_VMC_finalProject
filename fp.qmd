@@ -1,0 +1,475 @@
+---
+title: "Final Project"
+editor: visual
+output:
+  html_document:
+    code_folding: "hide"
+---
+
+#### Stat-515-002 (Spring 2024)
+
+***Group Number: 14***
+
+## What is Project based on?
+
+::: {style="text-align:justify"}
+Our project revolves around a thorough examination of a dataset documenting motor vehicle collisions on county and local roadways within Montgomery County, Maryland. This dataset serves as the cornerstone for our investigation into the myriad factors that influence traffic accidents and their consequences. Through meticulous analysis and advanced statistical techniques, we aim to uncover insightful patterns and correlations that can inform proactive measures for enhancing road safety and mitigating accident risks.
+
+In our endeavor, we transcend conventional data exploration by incorporating hypothesis testing and predictive modeling methodologies. By formulating and testing hypotheses pertaining to weather conditions, daylight, injury severity, vehicle types, distractions, and traffic control measures, we strive to unveil underlying relationships and trends within the data. Additionally, our predictive modeling efforts seek to anticipate injury severity and vehicle damage extent based on a diverse set of variables including collision type, vehicle movement, and speed limit. Through this comprehensive approach, our project aspires to deliver actionable insights that can empower stakeholders in making informed decisions aimed at fostering safer road environments and reducing the occurrence of motor vehicle collisions.
+:::
+
+## What’s our Goal?
+
+::: {style="text-align:justify"}
+Our goal is to deeply understand why and how motor vehicle collisions happen in Montgomery County, Maryland. By analyzing a vast amount of data on these accidents, we aim to uncover patterns, trends, and correlations that shed light on the factors contributing to crashes. Through this exploration, we seek to identify key variables such as weather conditions, road surfaces, vehicle types, and driver behaviors that play significant roles in accident occurrence and severity.
+
+Ultimately, our aim is to use this knowledge to inform strategies and interventions that can enhance road safety and reduce the frequency and severity of motor vehicle collisions. By providing insights into the root causes and contributing factors of accidents, we aspire to empower policymakers, law enforcement agencies, and community stakeholders with the information they need to implement effective measures for preventing accidents and safeguarding lives on the roads of Montgomery County.
+:::
+
+## Research Questions :
+
+## Visualization1 : What are the trends in the frequency of car crashes over years?
+
+![](images/1.png)
+
+<details>
+
+<summary>Code</summary>
+
+```{r ,message = FALSE}
+library(ggplot2)
+library(dplyr)
+
+# Read data and remove missing values
+data <- read.csv('/Users/manoharshasappa/Desktop/Stat_Final_project de/CrashReportingDriversData.csv')
+data <- na.omit(data)
+
+# Convert Crash_Date to a Date format
+data$Crash_Date <- as.Date(data$Crash.Date.Time, format = "%m/%d/%Y %I:%M:%S %p")
+
+# Extract year from Crash_Date
+data$Year <- format(data$Crash_Date, "%Y")
+
+# Group the data by year and count the number of crashes
+yearly_crash_count <- data %>%
+  group_by(Year) %>%
+  summarise(Num_Crashes = n())
+
+# Provided data
+yearly_crash_data <- data.frame(
+  Year = c("2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024"),
+  Num_Crashes = c(20268, 21783, 21537, 21035, 20943, 13798, 16210, 17577, 18913, 7))
+
+# Plot using ggplot2
+plot1 = ggplot(yearly_crash_data, aes(x = Year, y = Num_Crashes)) +
+  geom_bar(stat = "identity", fill = "#1F78B4") +  # Adjusted color
+  labs(title = "Crash Frequency per Year",
+       x = "Year",
+       y = "Number of Crashes") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+# plot1
+```
+
+</details>
+
+<details>
+
+<summary>Columns Used</summary>
+
+**Columns Used:**
+
+-   **`Crash_Date`**:
+
+    -   **Rationale for Use**: The specific date and time of each crash incident are crucial for temporal analysis and trend identification.
+
+-   **`Year`** (Derived from **`Crash_Date`**):
+
+    -   **Rationale for Use**: Grouping the data by year enables the identification of yearly patterns and trends in crash occurrences.
+
+-   **`Num_Crashes`** (Derived from counting the number of records for each year):
+
+    -   **Rationale for Use**: Quantifying the crash frequency provides a clear measure for understanding the magnitude of road accidents over time.
+
+</details>
+
+::: {style="text-align:justify"}
+**Explanation of the Code:** This visualizes the frequency of crashes per year using ggplot2 in R. Initially, it converts the "Crash_Date" column into a date format and extracts the year from it. Then, it groups the data by year and calculates the number of crashes that occurred each year.
+:::
+
+## hypo#1. is there any relation between weather condition, day light on injury severity
+
+This test perfomes. provided performs a chi-square test to determine whether there is a statistically significant association between weather condition, light condition, on injury severity, Here's an explanation of why this test was conducted and what was observed:
+
+**Chi-Square Test**: The chi-square test is a statistical test used to determine whether there is a significant association between two categorical variables. In this case, the variables of interest are weather condition, light condition, and injury severity.
+
+**Observation**: By analyzing the contingency table generated from the data, which shows the frequency distribution of the combinations of weather condition, light condition, and injury severity, we can observe the following:
+
+-   The contingency table provides counts of the number of accidents for each combination of weather condition, light condition.
+
+-   The chi-square test is then applied to assess whether these variables are independent of each other or if there is a relationship between them.
+
+![](images/h1.png){width="1000"}
+
+<details>
+
+<summary>Code</summary>
+
+```{r,message = FALSE}
+# Contingency table of Weather, Light, and Injury Severity
+contingency_table <- table(data$Weather, data$Light, data$Injury.Severity)
+
+# Remove any empty dimensions
+contingency_table <- margin.table(contingency_table, c(1, 2))
+
+
+# Chi-square test of independence
+chi_square_test <- chisq.test(contingency_table)
+
+# Print the test results
+print(chi_square_test)
+```
+
+</details>
+
+::: {style="text-align:justify"}
+**Interpretation of Results**: The question is asking if there's any relationship between weather conditions, daylight, and injury severity in accidents. To analyze this, a Pearson's Chi-squared test was conducted on the contingency table. The output indicates a significant relationship between these variables, with a very low p-value (p \< 2.2e-16). This suggests that the observed frequencies of injury severity across different weather conditions and daylight statuses are unlikely to have occurred by chance alone, indicating a strong association between these factors.
+:::
+
+## visualization3 : Top 10 cars which involve in car cashes?
+
+![](images/2-01.png)
+
+<details>
+
+<summary>Code</summary>
+
+```{r,message = FALSE}
+vehicle_counts <- data %>%
+  group_by(Vehicle.Make) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count)) # Sort by count in descending order
+
+# Take the top N most common vehicle makes for better visualization
+top_n <- 10 # You can adjust this value as needed
+
+top_vehicle_counts <- vehicle_counts %>%
+  top_n(top_n, count)
+
+plot2 = ggplot(top_vehicle_counts, aes(x = reorder(Vehicle.Make, count), y = count)) +
+  geom_bar(stat = "identity", fill = "blue") +  # Stacked bar plot with blue color
+  labs(title = "Top 10 Most Common Vehicle Makes in Accidents",
+       x = "Vehicle Make",
+       y = "Number of Accidents") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text = element_text(size = 14)) +  # Adjust text size
+  coord_flip() +  # Flip x and y axis
+  ylim(0, max(top_vehicle_counts$count) * 1.1)
+# plot2
+```
+
+</details>
+
+<details>
+
+<summary>Columns Used</summary>
+
+**Columns Used:**
+
+-   **Vehicle.Make**: This column is used to group the data by vehicle make, as we want to count the number of accidents for each vehicle make.
+
+-   **count**: This column is created using **`summarise()`** to count the number of accidents for each vehicle make group. It represents the frequency of accidents for each vehicle make.
+
+</details>
+
+::: {style="text-align:justify"}
+**Explanation of the Code:** This generates a bar plot showing the top 10 most common vehicle makes involved in accidents, with vehicle make names on the y-axis and the number of accidents on the x-axis. It uses dplyr to summarize and arrange the data, then ggplot2 for visualization.
+:::
+
+## hypo#2. Are certain types of vehicles more likely to be involved in collisions at night compared to during the day?
+
+The code aims to determine whether certain types of vehicles are more likely to be involved in collisions at night compared to during the day. Here's a clear interpretation of the analysis:
+
+1.  **Subset Data**: The dataset is divided into two subsets: collisions occurring during the day (**`collisions_day`**) and collisions occurring at night with lights on (**`collisions_night`**).
+
+2.  **Count Vehicle Types**: Counts of each vehicle type involved in collisions are calculated separately for day and night collisions.
+
+**Chi-Square Test**: A chi-square test of independence is performed to assess whether there is a significant association between vehicle types and the time of the collision (day or night).
+
+![](images/h2.png){width="1000"}
+
+<details>
+
+<summary>Code</summary>
+
+```{r,message = FALSE}
+# Subset data for collisions during the day and at night
+collisions_day <- subset(data, Light == "DAYLIGHT")
+collisions_night <- subset(data, Light == "DARK LIGHTS ON")
+
+# Get the counts of each vehicle type for day and night collisions
+counts_day <- table(collisions_day$Vehicle.Body.Type)
+counts_night <- table(collisions_night$Vehicle.Body.Type)
+
+# Perform chi-square test of independence
+chi_square_test <- chisq.test(counts_day, counts_night)
+
+# Print the test results
+print(chi_square_test)
+```
+
+</details>
+
+::: {style="text-align:justify"}
+**Interpretation of Results**: The question is investigating whether certain types of vehicles are more prone to being involved in collisions at night compared to during the day. To analyze this, a Pearson's Chi-squared test was conducted comparing the counts of collisions involving different types of vehicles during the day and at night. The output indicates that there is no significant difference in the distribution of collisions across different types of vehicles between day and night, with a p-value of 0.2408. This suggests that the likelihood of different types of vehicles being involved in collisions is similar during both day and night.
+:::
+
+## hypo#3. Do drivers distracted by electronic devices have a higher rate of collisions compared to drivers distracted by other factors?
+
+The analysis aims to determine whether drivers distracted by electronic devices have a higher rate of collisions compared to drivers distracted by other factors. Here's a clear interpretation of the results:
+
+1.  **Data Subset**: The dataset is divided into two subsets: one for drivers distracted by electronic devices (**`electronic_distracted`**) and another for drivers distracted by other factors (**`other_distracted`**).
+
+2.  **Count Collisions**: The number of collisions is counted separately for drivers distracted by electronic devices and those distracted by other factors.
+
+3.  **Chi-Square Test**: A chi-square test of independence is performed to assess whether there is a significant difference in collision rates between the two groups of drivers.
+
+![](images/h3.png){width="1000"}
+
+<details>
+
+<summary>Code</summary>
+
+```{r,message = FALSE}
+# Subset the data for drivers distracted by electronic devices
+electronic_distracted <- subset(data, Driver.Distracted.By == "ELECTRONIC DEVICE")
+
+# Subset the data for drivers distracted by other factors
+other_distracted <- subset(data, Driver.Distracted.By != "ELECTRONIC DEVICE" & Driver.Distracted.By != "NOT DISTRACTED")
+
+# Count the number of collisions for each distraction type
+counts_electronic <- nrow(electronic_distracted)
+counts_other <- nrow(other_distracted)
+
+# Perform chi-square test
+chi_square_test <- chisq.test(c(counts_electronic, counts_other))
+
+# Print the test results
+print(chi_square_test)
+```
+
+</details>
+
+::: {style="text-align:justify"}
+**Interpretation of Results**: The question aims to determine if drivers distracted by electronic devices have a higher collision rate compared to those distracted by other factors. To analyze this, a Chi-squared test was conducted comparing the collision counts between drivers distracted by electronic devices and those distracted by other factors. The output indicates a significant difference between the two groups, with a very low p-value (p \< 2.2e-16). This suggests that drivers distracted by electronic devices indeed have a significantly higher collision rate compared to those distracted by other factors.
+:::
+
+<details>
+
+<summary>Code</summary>
+
+```{r,message = FALSE}
+library('rpart.plot')
+# prp(d_model, type = 2, extra = 1, branch = 0.6)
+```
+
+</details>
+
+::: {style="text-align:justify"}
+**Interpretation of Results**: The output shows the performance of a model that predicts the extent of vehicle damage in collisions. It's about 45% accurate overall. The model is better at predicting certain types of damage, like "DISABLING," but not so good at others, like "DESTROYED" or "NO DAMAGE." The confusion matrix gives details on predictions versus actual outcomes. The most crucial factors for prediction are collision type, vehicle movement, and speed limit. Collision type is the most important, followed by vehicle movement and speed limit.
+:::
+
+## hypo#4: Can we determine the effectiveness of different traffic control measures (Traffic.Control) in reducing collision rates? Which types of traffic controls are most effective in preventing collisions?
+
+![](images/h4.png){width="1000"}
+
+### Graph :
+
+![](images/hy4.png){width="1000"}
+
+<details>
+
+<summary>Code</summary>
+
+```{r,message = FALSE}
+# Subset the dataset to include only the required columns
+traffic_data <- data[, c("Traffic.Control", "Injury.Severity")]
+# Remove rows with any missing values
+traffic_data <- na.omit(traffic_data)
+
+library(ggplot2)
+library(dplyr)
+
+traffic_data[traffic_data == "N/A"] <- NA
+
+# Remove rows with any missing values
+traffic_data <- na.omit(traffic_data)
+
+# Check if there are any missing values left
+print(sum(is.na(traffic_data)))
+collision_counts <- traffic_data %>%
+  group_by(Traffic.Control) %>%
+  summarise(Collision_Count = n())
+
+# Calculate collision rates for each traffic control type
+total_collisions <- nrow(traffic_data)
+collision_rates <- collision_counts %>%
+  mutate(Collision_Rate = Collision_Count / total_collisions)
+
+# Statistical Analysis
+# Perform chi-square test to compare collision rates between different traffic controls
+chi_square_test <- chisq.test(traffic_data$Traffic.Control, traffic_data$Injury.Severity)
+
+# Visualization
+par(mfrow=c(1, 2))  # Set up a 1x2 plotting grid
+
+# Create a bar plot using ggplot2
+plot3 = ggplot(collision_counts, aes(x = reorder(Traffic.Control, -Collision_Count), y = Collision_Count)) +
+  geom_bar(stat = "identity", fill = "skyblue") +
+  labs(title = "Collision Counts by Traffic Control Type",
+       x = "Traffic Control Type",
+       y = "Collision Count") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+#plot3
+```
+
+</details>
+
+::: {style="text-align:justify"}
+**Interpretation of Results**: The question investigates whether different types of traffic control measures are effective in reducing collision rates and which ones are most effective. To analyze this, a Pearson's Chi-squared test was conducted between the types of traffic control measures and the severity of injuries resulting from collisions. The output shows a significant relationship between the two variables, with a very low p-value (p \< 2.2e-16). This suggests that the effectiveness of traffic control measures in preventing collisions varies significantly across different types. However, further analysis would be needed to determine which specific types of traffic controls are most effective in reducing collision rates and severity of injuries.
+:::
+
+### per#3: find the locations of crashes using the K-means algorithm?
+
+### Graph:
+
+![](images/3.png)
+
+![](images/4-01.png)
+
+<details>
+
+<summary>Code</summary>
+
+```{r,message = FALSE}
+# Load required libraries
+#library(ggplot2)
+#library(dplyr)
+
+# Assuming your dataset is called 'location_data' and contains columns 'Latitude' and 'Longitude'
+
+# Select latitude and longitude columns
+#location_data <- data %>% select(Latitude, Longitude)
+
+# Normalize data
+#normalized_data <- scale(location_data)
+
+# Initialize vector to store within-cluster sum of squares (WCSS)
+#wcss <- vector()
+
+# Iterate over different values of k
+#for (i in 1:10) {
+  # Apply K-Means algorithm
+  # kmeans_model <- kmeans(normalized_data, centers = i)
+  
+  # Store within-cluster sum of squares (WCSS)
+  # wcss[i] <- kmeans_model$tot.withinss}
+
+# Plot the elbow curve
+#plot4 = elbow_plot <- ggplot(data = data.frame(k = 1:10, WCSS = wcss), aes(x = k, y = WCSS)) +
+  #geom_line(color = "blue") +
+  #geom_point(color = "red") +
+  #labs(title = "Elbow Method for Optimal K",
+       #x = "Number of Clusters (k)",
+       #y = "Within-Cluster Sum of Squares (WCSS)") +
+  #scale_x_continuous(breaks = 1:10)
+
+# plot4
+
+```
+
+```{r}
+#library(stats)
+#library(ggplot2)
+
+# Numerical columns for clustering
+#numerical_cols <- c("Latitude", "Longitude")
+
+# Subset the data with only numerical columns
+#numerical_data <- data[, numerical_cols]
+
+# Standardizing numerical data
+#scaled_data <- scale(numerical_data)
+
+# Determine the optimal number of clusters based on the elbow method
+#num_clusters <- 2
+
+# Perform k-means clustering with the chosen number of clusters
+#kmeans_model <- kmeans(scaled_data, centers = num_clusters)
+
+# Add cluster labels to the original dataset
+#data$Cluster <- as.factor(kmeans_model$cluster)
+
+# Visualize the clusters
+#plot5 = ggplot(data = data, aes(x = Longitude, y = Latitude, color = Cluster)) +
+  #geom_point() +
+  #labs(title = "Clustering of Accidents based on Location") +
+  #theme_minimal()
+
+#plot5
+```
+
+</details>
+
+## visualization2 : How does the distribution of car accidents vary geographically?
+
+```{r ,message = FALSE,echo=FALSE}
+library(leaflet)
+data <- read.csv('/Users/manoharshasappa/Desktop/Stat_Final_project de/CrashReportingDriversData.csv')
+data <- na.omit(data) 
+map <- leaflet(data) %>%
+  addTiles() %>%
+  addCircleMarkers(
+    lng = ~Longitude,
+    lat = ~Latitude,
+    popup = ~as.character(Report.Number),
+    label = ~as.character(Report.Number)
+  )
+
+# Print the map
+map
+```
+
+<details>
+
+<summary>Code</summary>
+
+```{r ,message = FALSE,echo=FALSE}
+#library(leaflet)
+#data <- read.csv('/Users/manoharshasappa/Desktop/Stat_Final_project de/CrashReportingDriversData.csv')
+#data <- na.omit(data) 
+#map <- leaflet(data) %>%
+  #addTiles() %>%
+  #addCircleMarkers(
+    #lng = ~Longitude,
+    #lat = ~Latitude,
+    #popup = ~as.character(Report.Number),
+    #label = ~as.character(Report.Number))
+# Print the map
+# map
+```
+
+</details>
+
+**Columns Used:**
+
+-   **Longitude:** Longitude coordinates are essential for accurately positioning each incident on the map.
+
+-   **Latitude:** Latitude coordinates complement longitude for precise incident mapping.
+
+-   **Report.Number:** Each incident is uniquely identified by a report number, facilitating individual incident reference and tracking.
+
+::: {style="text-align:justify"}
+**Explanation of the Code:** This utilizes the Leaflet package in R to generate an interactive map. It begins by loading Leaflet and then initializes a map object. Using latitude and longitude data from a dataframe named 'data', it places circle markers on the map to represent specific locations, like crash sites. Each marker includes a popup and label showing the associated report number. Finally, it prints the interactive map, allowing users to explore the locations and corresponding report numbers within the R environment.
+:::

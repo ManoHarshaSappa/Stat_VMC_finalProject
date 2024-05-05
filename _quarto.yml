@@ -10,7 +10,7 @@ website:
     - Home.qmd
     - Project Details.qmd
     - Research Design.qmd
-    - Final Project.qmd
+    - fp.qmd
     - Conclusion.qmd
 
 format: 
