@@ -1,0 +1,18 @@
+project: 
+  type: website 
+  output-dir: docs 
+
+website:
+  title: "Final Project" 
+  navbar: 
+    left: 
+    
+    - Home.qmd
+    - Dataset Description.qmd
+    - Research Design.qmd
+    - Final Project.qmd
+    - Concluding Thoughts.qmd
+
+format: 
+  html: 
+    theme: Flatly
