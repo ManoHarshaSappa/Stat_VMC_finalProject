@@ -16,6 +16,8 @@ In conclusion, the Research Design encompasses a comprehensive methodology to in
 
 #### 2. How can data from in-vehicle telematics systems be integrated with collision data to provide more accurate risk assessments?
 
+#### 3. Model evaluation of (pre1) Can we predict the severity of injuries based on various factors such as weather conditions, road surface conditions, and collision type?
+
 ## References:
 
 ::: {style="text-align:justify"}

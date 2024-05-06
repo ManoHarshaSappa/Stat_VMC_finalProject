@@ -18,19 +18,19 @@ output:
 **Methodology -** To address this hypothesis, we will conduct a Pearson's Chi-squared test between traffic control measures and injury severity. By statistically analyzing data on traffic control measures and their impact on collision rates, we can assess the effectiveness of various measures and identify the most impactful ones for preventing collisions.
 :::
 
-### Prediction #1: Can we predict the severity of injuries based on various factors such as weather conditions, road surface conditions, and collision type?
+### Prediction 1: Can we predict the severity of injuries based on various factors such as weather conditions, road surface conditions, and collision type?
 
 ::: {style="text-align:justify"}
 **Methodology -** To make predictions about injury severity, we will utilize a random forest classification model trained on relevant dataset. This model will analyze various factors such as weather conditions, road surface conditions, and collision type to predict injury severity. By assessing the model's accuracy and performance, we can determine its effectiveness in predicting injury severity.
 :::
 
-### Prediction #2: Finding the location of Crashes using the K-means algorithm?
+### Prediction 2: Finding the location of Crashes using the K-means algorithm?
 
 ::: {style="text-align:justify"}
 **Methodology -** K-means is a method used to cluster data points into groups based on their similarity. Initially, it randomly selects points on a graph known as centroids, which represent the centers of the clusters. Then, each data point is assigned to the nearest centroid, forming an initial grouping. Afterward, the centroids are recalculated as the average position of all the points within each cluster. This process of assigning and updating centroids iterates until the centroids stabilize, meaning they don't move much between iterations. At that point, the algorithm has identified the clusters, and each data point belongs to the group associated with the nearest centroid. Overall, k-means is a straightforward yet powerful technique for partitioning data into distinct groups based on their proximity to one another.
 :::
 
-### Visualization2: How does the distribution of car accidents vary geographically?\*\*
+### Visualization2: How does the distribution of car accidents vary geographically?
 
 ::: {style="text-align:justify"}
 **Methodology -** To understand the geographical distribution of car accidents, we will utilize the Leaflet package in R. This package enables us to create interactive maps displaying crash locations and associated fatalities using latitude and longitude data. By visualizing this data on a map, we can identify any geographic patterns or hotspots where accidents are more prevalent.
