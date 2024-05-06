@@ -20,6 +20,40 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -142,59 +176,53 @@ ul.task-list li input[type="checkbox"] {
 
 
 <section id="visualization1-what-are-the-trends-in-the-frequency-of-car-crashes-over-years" class="level3">
-<h3 class="anchored" data-anchor-id="visualization1-what-are-the-trends-in-the-frequency-of-car-crashes-over-years"><strong>1. Visualization1:</strong> What are the trends in the frequency of car crashes over years?</h3>
+<h3 class="anchored" data-anchor-id="visualization1-what-are-the-trends-in-the-frequency-of-car-crashes-over-years">Visualization1: What are the trends in the frequency of car crashes over years?</h3>
 <div style="text-align:justify">
 <p><strong>Methodology -</strong> To analyze the trend of crash frequency over the years, we will use ggplot2 in R. This allows us to create visual representations of data. We’ll transform the Crash_Date column into a date format and group the data by year. By visualizing this data, we can identify any noticeable patterns or trends in crash frequency over time.</p>
 </div>
 </section>
-<section id="visualization2-how-does-the-distribution-of-car-accidents-vary-geographically" class="level3">
-<h3 class="anchored" data-anchor-id="visualization2-how-does-the-distribution-of-car-accidents-vary-geographically"><strong>2. Visualization2: How does the distribution of car accidents vary geographically?</strong></h3>
-<div style="text-align:justify">
-<p><strong>Methodology -</strong> To understand the geographical distribution of car accidents, we will utilize the Leaflet package in R. This package enables us to create interactive maps displaying crash locations and associated fatalities using latitude and longitude data. By visualizing this data on a map, we can identify any geographic patterns or hotspots where accidents are more prevalent.</p>
-</div>
-</section>
-<section id="visualization3-top-10-cars-which-involve-in-car-cashes" class="level3">
-<h3 class="anchored" data-anchor-id="visualization3-top-10-cars-which-involve-in-car-cashes"><strong>3. Visualization3: Top 10 cars which involve in car cashes?</strong></h3>
-<div style="text-align:justify">
-<p><strong>Methodology -</strong> To identify the top 10 car manufacturers involved in car accidents, we will generate a bar plot using ggplot2 in R. This plot will showcase the most common vehicle makes involved in accidents. We’ll use dplyr for data summarization and arrangement to identify the top 10 manufacturers based on accident frequency.</p>
-</div>
-</section>
-<section id="hypothesis-1-is-there-any-relation-between-weather-conditions-daylight-and-injury-severity" class="level3">
-<h3 class="anchored" data-anchor-id="hypothesis-1-is-there-any-relation-between-weather-conditions-daylight-and-injury-severity"><strong>4. Hypothesis #1: Is there any relation between weather conditions, daylight, and injury severity?</strong></h3>
-<p>Question: - Is there any relation between weather conditions, daylight, and injury severity?</p>
-<div style="text-align:justify">
-<p><strong>Methodology -</strong> To test this hypothesis, we will conduct a Pearson’s Chi-squared test on a contingency table. This test will analyze the association between weather conditions, daylight, and injury severity. By examining the relationship between these variables statistically, we can determine if there’s a significant correlation between them.</p>
-</div>
-</section>
-<section id="hypothesis-2-are-certain-types-of-vehicles-more-likely-to-be-involved-in-collisions-at-night-compared-to-during-the-day" class="level3">
-<h3 class="anchored" data-anchor-id="hypothesis-2-are-certain-types-of-vehicles-more-likely-to-be-involved-in-collisions-at-night-compared-to-during-the-day"><strong>5. Hypothesis #2: Are certain types of vehicles more likely to be involved in collisions at night compared to during the day?</strong></h3>
-<div style="text-align:justify">
-<p><strong>Methodology -</strong> To investigate this hypothesis, we will perform a Pearson’s Chi-squared test comparing collision counts involving different types of vehicles during the day and at night. By statistically analyzing collision data, we can determine if certain vehicle types are more prone to accidents during specific times of the day.</p>
-</div>
-</section>
-<section id="hypothesis-3-do-drivers-distracted-by-electronic-devices-have-a-higher-rate-of-collisions-compared-to-drivers-distracted-by-other-factors" class="level3">
-<h3 class="anchored" data-anchor-id="hypothesis-3-do-drivers-distracted-by-electronic-devices-have-a-higher-rate-of-collisions-compared-to-drivers-distracted-by-other-factors"><strong>6. Hypothesis #3: Do drivers distracted by electronic devices have a higher rate of collisions compared to drivers distracted by other factors?</strong></h3>
-<div style="text-align:justify">
-<p><strong>Methodology -</strong> To explore this hypothesis, we will conduct a Chi-squared test comparing collision counts between drivers distracted by electronic devices and those distracted by other factors. By examining collision data and analyzing distraction-related factors, we can determine if electronic device distraction significantly impacts collision rates.</p>
-</div>
-</section>
-<section id="hypothesis-4-can-we-determine-the-effectiveness-of-different-traffic-control-measures-in-reducing-collision-rates-which-types-of-traffic-controls-are-most-effective-in-preventing-collisions" class="level3">
-<h3 class="anchored" data-anchor-id="hypothesis-4-can-we-determine-the-effectiveness-of-different-traffic-control-measures-in-reducing-collision-rates-which-types-of-traffic-controls-are-most-effective-in-preventing-collisions"><strong>7. Hypothesis #4: Can we determine the effectiveness of different traffic control measures in reducing collision rates? Which types of traffic controls are most effective in preventing collisions?</strong></h3>
-<div style="text-align:justify">
-<p><strong>Methodology -</strong> To address this hypothesis, we will conduct a Pearson’s Chi-squared test between traffic control measures and injury severity. By statistically analyzing data on traffic control measures and their impact on collision rates, we can assess the effectiveness of various measures and identify the most impactful ones for preventing collisions.</p>
-</div>
+<section id="hypothesis-1-can-we-determine-the-effectiveness-of-different-traffic-control-measures-in-reducing-collision-rates-which-types-of-traffic-controls-are-most-effective-in-preventing-collisions" class="level3">
+<h3 class="anchored" data-anchor-id="hypothesis-1-can-we-determine-the-effectiveness-of-different-traffic-control-measures-in-reducing-collision-rates-which-types-of-traffic-controls-are-most-effective-in-preventing-collisions">Hypothesis 1: Can we determine the effectiveness of different traffic control measures in reducing collision rates? Which types of traffic controls are most effective in preventing collisions?</h3>
+<p>::: {style=“text-align:justify”} <strong>Methodology -</strong> To address this hypothesis, we will conduct a Pearson’s Chi-squared test between traffic control measures and injury severity. By statistically analyzing data on traffic control measures and their impact on collision rates, we can assess the effectiveness of various measures and identify the most impactful ones for preventing collisions.</p>
 </section>
 <section id="prediction-1-can-we-predict-the-severity-of-injuries-based-on-various-factors-such-as-weather-conditions-road-surface-conditions-and-collision-type" class="level3">
-<h3 class="anchored" data-anchor-id="prediction-1-can-we-predict-the-severity-of-injuries-based-on-various-factors-such-as-weather-conditions-road-surface-conditions-and-collision-type"><strong>8. Prediction #1: Can we predict the severity of injuries based on various factors such as weather conditions, road surface conditions, and collision type?</strong></h3>
+<h3 class="anchored" data-anchor-id="prediction-1-can-we-predict-the-severity-of-injuries-based-on-various-factors-such-as-weather-conditions-road-surface-conditions-and-collision-type">Prediction #1: Can we predict the severity of injuries based on various factors such as weather conditions, road surface conditions, and collision type?</h3>
 <div style="text-align:justify">
 <p><strong>Methodology -</strong> To make predictions about injury severity, we will utilize a random forest classification model trained on relevant dataset. This model will analyze various factors such as weather conditions, road surface conditions, and collision type to predict injury severity. By assessing the model’s accuracy and performance, we can determine its effectiveness in predicting injury severity.</p>
 </div>
 </section>
-<section id="prediction-2-can-we-predict-the-extent-of-vehicle-damage-in-collisions-based-on-collision-type-vehicle-movement-and-speed-limit" class="level3">
-<h3 class="anchored" data-anchor-id="prediction-2-can-we-predict-the-extent-of-vehicle-damage-in-collisions-based-on-collision-type-vehicle-movement-and-speed-limit"><strong>9. Prediction #2: Can we predict the extent of vehicle damage in collisions based on collision type, vehicle movement, and speed limit?</strong></h3>
+<section id="prediction-2-finding-the-location-of-crashes-using-the-k-means-algorithm" class="level3">
+<h3 class="anchored" data-anchor-id="prediction-2-finding-the-location-of-crashes-using-the-k-means-algorithm">Prediction #2: Finding the location of Crashes using the K-means algorithm?</h3>
 <div style="text-align:justify">
-<p><strong>Methodology -</strong> To make predictions about vehicle damage extent, we will evaluate model performance using confusion matrix and key predictors. By analyzing collision data and training a predictive model, we can assess its accuracy in predicting the extent of vehicle damage based on collision type, vehicle movement, and speed limit.</p>
+<p><strong>Methodology -</strong> K-means is a method used to cluster data points into groups based on their similarity. Initially, it randomly selects points on a graph known as centroids, which represent the centers of the clusters. Then, each data point is assigned to the nearest centroid, forming an initial grouping. Afterward, the centroids are recalculated as the average position of all the points within each cluster. This process of assigning and updating centroids iterates until the centroids stabilize, meaning they don’t move much between iterations. At that point, the algorithm has identified the clusters, and each data point belongs to the group associated with the nearest centroid. Overall, k-means is a straightforward yet powerful technique for partitioning data into distinct groups based on their proximity to one another.</p>
 </div>
+</section>
+<section id="visualization2-how-does-the-distribution-of-car-accidents-vary-geographically" class="level3">
+<h3 class="anchored" data-anchor-id="visualization2-how-does-the-distribution-of-car-accidents-vary-geographically">Visualization2: How does the distribution of car accidents vary geographically?**</h3>
+<div style="text-align:justify">
+<p><strong>Methodology -</strong> To understand the geographical distribution of car accidents, we will utilize the Leaflet package in R. This package enables us to create interactive maps displaying crash locations and associated fatalities using latitude and longitude data. By visualizing this data on a map, we can identify any geographic patterns or hotspots where accidents are more prevalent.</p>
+</div>
+<details>
+<summary>
+More Research Questions
+</summary>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="do">### Visualization3: Top 10 cars which involve in car cashes?</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#**Methodology -** To identify the top 10 car manufacturers involved in car accidents, we will generate a bar plot using ggplot2 in R. This plot will showcase the most common vehicle makes involved in accidents. We'll use dplyr for data summarization and arrangement to identify the top 10 manufacturers based on accident frequency.</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="do">### Hypothesis 2: Is there any relation between weather conditions, daylight, and injury severity?</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#**Methodology -** To test this hypothesis, we will conduct a Pearson's Chi-squared test on a contingency table. This test will analyze the association between weather conditions, daylight, and injury severity. By examining the relationship between these variables statistically, we can determine if there's a significant correlation between them.</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="do">### Hypothesis 3: Are certain types of vehicles more likely to be involved in collisions at night compared to during the day?</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">#**Methodology -** To investigate this hypothesis, we will perform a Pearson's Chi-squared test comparing collision counts involving different types of vehicles during the day and at night. By statistically analyzing collision data, we can determine if certain vehicle types are more prone to accidents during specific times of the day.</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="do">### Hypothesis 4: Do drivers distracted by electronic devices have a higher rate of collisions compared to drivers distracted by other factors?</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="co">#**Methodology -** To explore this hypothesis, we will conduct a Chi-squared test comparing collision counts between drivers distracted by electronic devices and those distracted by other factors. By examining collision data and analyzing distraction-related factors, we can determine if electronic device distraction significantly impacts collision rates.</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="do">### Prediction #3: Can we predict the extent of vehicle damage in collisions based on collision type, vehicle movement, and speed limit?</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">#**Methodology -** To make predictions about vehicle damage extent, we will evaluate model performance using confusion matrix and key predictors. By analyzing collision data and training a predictive model, we can assess its accuracy in predicting the extent of vehicle damage based on collision type, vehicle movement, and speed limit.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</details>
 
 
 </section>

@@ -28,7 +28,7 @@ Ultimately, our aim is to use this knowledge to inform strategies and interventi
 
 ## Research Questions :
 
-## Visualization1 : What are the trends in the frequency of car crashes over years?
+## Visualization : What are the trends in the frequency of car crashes over years?
 
 ### Graph:
 
@@ -95,18 +95,18 @@ plot1 = ggplot(yearly_crash_data, aes(x = Year, y = Num_Crashes)) +
 **Interpretation of Results**: To analyze this, a Pearson's Chi-squared test was conducted between the types of traffic control measures and the severity of injuries resulting from collisions. The output shows a significant relationship between the two variables, with a very low p-value (p \< 2.2e-16). This suggests that the effectiveness of traffic control measures in preventing collisions varies significantly across different types. However, further analysis would be needed to determine which specific types of traffic controls are most effective in reducing collision rates and severity of injuries.
 :::
 
-**Column used:**
-
--   **Collision_Count:** This variable represents the count of collisions for each type of traffic control. It is the response variable as it reflects the outcome of interest, i.e., the number of collisions categorized by the type of traffic control.
--   **Traffic.Control:** This variable represents different types of traffic controls (e.g., stop sign, traffic signal). It serves as the predictor variable as it is used to categorize and group the collisions based on the type of traffic control present at the collision location.
-
 ### Graph :
 
 ![](images/hy4.png)
 
+**Column used:**
+::: {style="text-align:justify"}
+-   **Collision_Count:** This variable represents the count of collisions for each type of traffic control. It is the response variable as it reflects the outcome of interest, i.e., the number of collisions categorized by the type of traffic control.
+-   **Traffic.Control:** This variable represents different types of traffic controls (e.g., stop sign, traffic signal). It serves as the predictor variable as it is used to categorize and group the collisions based on the type of traffic control present at the collision location.
+:::
 <details>
 
-<summary>Code</summary>
+<summary>code</summary>
 
 ```{r}
 # Subset the dataset to include only the required columns
@@ -176,28 +176,16 @@ plot3 = ggplot(collision_counts, aes(x = reorder(Traffic.Control, -Collision_Cou
 
 ![](images/104.png)
 
-###kasdfdsf
-
 ![](images/105.png)
 
 ### Variable importance plot:
 
 ![](images/107.png)
 
-![](images/111.png)
-
-### Model Evaluation & Improving:
-
-![](images/109.png){width="701"}
-
-### Graph :
-
-![](images/108.png)
-
 ### interpretation
 
 ::: {style="text-align:justify"}
-Using logistic regression to make our model better means it's getting better at guessing correctly and telling the difference between things. It's like it's learning to understand the data more accurately. So, when we see accuracy and AUC (another way to measure how good it is) going up, it's a sign that our model is getting smarter and more reliable at its job.
+When it comes to predicting outcomes, the type of collision stands out as the most crucial factor. Whether it's a rear-end collision, a side-impact, or another type, this information holds significant weight in determining what happens next. Following closely behind is the influence of weather conditions. Factors like rain, snow, or fog can substantially alter the aftermath of a collision, impacting everything from visibility to road conditions. Lastly, while the surface condition, such as wet or icy roads, does play a role, its importance falls slightly behind collision type and weather conditions in predicting outcomes.
 :::
 
 <details>
@@ -402,7 +390,7 @@ Using logistic regression to make our model better means it's getting better at 
 
 </details>
 
-## Pre2: Find the locations of crashes using the K-means algorithm?
+## Pre2: Finding the locations of crashes using the K-means algorithm?
 
 ::: {style="text-align:justify"}
 First, we import some tools we need, like ggplot2 for making graphs and dplyr for managing data. Next, We pick out the latitude and longitude data from our dataset. This helps us group locations based on where they are.
@@ -546,45 +534,13 @@ map
 </details>
 
 ::: {style="text-align:justify"}
-\- Latitude and Longitude: These variables represent the geographical coordinates of the crash locations. They serve as predictor variables as they are used to specify the locations where circle markers will be placed on the map.
+- Latitude and Longitude: These variables represent the geographical coordinates of the crash locations. They serve as predictor variables as they are used to specify the locations where circle markers will be placed on the map.
 
 **Explanation of the Code:** This utilizes the Leaflet package in R to generate an interactive map. It begins by loading Leaflet and then initializes a map object. Using latitude and longitude data from a dataframe named 'data', it places circle markers on the map to represent specific locations, like crash sites. Each marker includes a popup and label showing the associated report number. Finally, it prints the interactive map, allowing users to explore the locations and corresponding report numbers within the R environment.
 :::
 <details>
 
 <summary>Some More Questions</summary>
-
-```{r,message = FALSE}
-
-## hypo#1. is there any relation between weather condition, day light on injury severity
-
-#This test performs provided performs a chi-square test to determine whether there is a statistically significant association between weather condition, light condition, on injury severity, Here's an explanation of why this test was conducted and what was observed:
-
-#1.  **Weather and Light**: This part of the analysis explores whether there's a relationship between weather conditions (e.g., clear, rainy, snowy) and light conditions (e.g., daylight, dark with street lights, dark without street lights). For instance, the test can indicate whether certain weather conditions are more likely to occur in conjunction with specific light conditions. A significant result suggests that weather and light conditions are not independent of each other.
-
-#**Chi-Square Test**: The chi-square test is a statistical test used to determine whether there is a significant association between two categorical variables. In this case, the variables of interest are weather condition, light condition.
-
-#**Observation**: By analyzing the contingency table generated from the data, which shows the frequency distribution of the combinations of weather condition, light condition, we can observe the following:
-
-#-   The contingency table provides counts of the number of accidents for each combination of weather condition, light condition.
-
-#-   The chi-square test is then applied to assess whether these variables are independent of each other or if there is a relationship between them.
-
-# Contingency table of Weather, Light, and Injury Severity
-#contingency_table <- table(data$Weather, data$Light, data$Injury.Severity)
-
-# Remove any empty dimensions
-#contingency_table <- margin.table(contingency_table, c(1, 2))
-
-
-# Chi-square test of independence
-#chi_square_test <- chisq.test(contingency_table)
-
-# Print the test results
-#print(chi_square_test)
-
-#**Interpretation of Results**: To analyze this, a Pearson's Chi-squared test was conducted on the contingency table. The output indicates a significant relationship between these variables, with a very low p-value (p \< 2.2e-16). This suggests that the observed frequencies of injury severity across different weather conditions and daylight statuses are unlikely to have occurred by chance alone, indicating a strong association between these factors.
-```
 
 ```{r,message = FALSE}
 
@@ -624,7 +580,39 @@ map
 ```
 
 ```{r,message = FALSE}
-## hypo#2. Are certain types of vehicles more likely to be involved in collisions at night compared to during the day?
+
+## hypo#2. is there any relation between weather condition, day light on injury severity
+
+#This test performs provided performs a chi-square test to determine whether there is a statistically significant association between weather condition, light condition, on injury severity, Here's an explanation of why this test was conducted and what was observed:
+
+#1.  **Weather and Light**: This part of the analysis explores whether there's a relationship between weather conditions (e.g., clear, rainy, snowy) and light conditions (e.g., daylight, dark with street lights, dark without street lights). For instance, the test can indicate whether certain weather conditions are more likely to occur in conjunction with specific light conditions. A significant result suggests that weather and light conditions are not independent of each other.
+
+#**Chi-Square Test**: The chi-square test is a statistical test used to determine whether there is a significant association between two categorical variables. In this case, the variables of interest are weather condition, light condition.
+
+#**Observation**: By analyzing the contingency table generated from the data, which shows the frequency distribution of the combinations of weather condition, light condition, we can observe the following:
+
+#-   The contingency table provides counts of the number of accidents for each combination of weather condition, light condition.
+
+#-   The chi-square test is then applied to assess whether these variables are independent of each other or if there is a relationship between them.
+
+# Contingency table of Weather, Light, and Injury Severity
+#contingency_table <- table(data$Weather, data$Light, data$Injury.Severity)
+
+# Remove any empty dimensions
+#contingency_table <- margin.table(contingency_table, c(1, 2))
+
+
+# Chi-square test of independence
+#chi_square_test <- chisq.test(contingency_table)
+
+# Print the test results
+#print(chi_square_test)
+
+#**Interpretation of Results**: To analyze this, a Pearson's Chi-squared test was conducted on the contingency table. The output indicates a significant relationship between these variables, with a very low p-value (p \< 2.2e-16). This suggests that the observed frequencies of injury severity across different weather conditions and daylight statuses are unlikely to have occurred by chance alone, indicating a strong association between these factors.
+```
+
+```{r,message = FALSE}
+## hypo#3. Are certain types of vehicles more likely to be involved in collisions at night compared to during the day?
 
 # The code aims to determine whether certain types of vehicles are more likely to be involved in collisions at night compared to during the day. Here's a clear interpretation of the analysis:
 
@@ -653,7 +641,7 @@ map
 
 ```{r}
 
-## hypo#3. Do drivers distracted by electronic devices have a higher rate of collisions compared to drivers distracted by other factors?
+## hypo#4. Do drivers distracted by electronic devices have a higher rate of collisions compared to drivers distracted by other factors?
 
 #The analysis aims to determine whether drivers distracted by electronic devices have a higher rate of collisions compared to drivers distracted by other factors. Here's a clear interpretation of the results:
 
