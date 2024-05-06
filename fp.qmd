@@ -34,8 +34,6 @@ Ultimately, our aim is to use this knowledge to inform strategies and interventi
 
 ![](images/1.png)
 
-\###
-
 <details>
 
 <summary>Code</summary>
@@ -89,177 +87,13 @@ plot1 = ggplot(yearly_crash_data, aes(x = Year, y = Num_Crashes)) +
 **Explanation of the Code:** This visualizes the frequency of crashes per year using ggplot2 in R. Initially, it converts the "Crash_Date" column into a date format and extracts the year from it. Then, it groups the data by year and calculates the number of crashes that occurred each year.
 :::
 
-## hypo#1. is there any relation between weather condition, day light on injury severity
-
-This test performs provided performs a chi-square test to determine whether there is a statistically significant association between weather condition, light condition, on injury severity, Here's an explanation of why this test was conducted and what was observed:
-
-1.  **Weather and Light**: This part of the analysis explores whether there's a relationship between weather conditions (e.g., clear, rainy, snowy) and light conditions (e.g., daylight, dark with street lights, dark without street lights). For instance, the test can indicate whether certain weather conditions are more likely to occur in conjunction with specific light conditions. A significant result suggests that weather and light conditions are not independent of each other.
-
-**Chi-Square Test**: The chi-square test is a statistical test used to determine whether there is a significant association between two categorical variables. In this case, the variables of interest are weather condition, light condition.
-
-**Observation**: By analyzing the contingency table generated from the data, which shows the frequency distribution of the combinations of weather condition, light condition, we can observe the following:
-
--   The contingency table provides counts of the number of accidents for each combination of weather condition, light condition.
-
--   The chi-square test is then applied to assess whether these variables are independent of each other or if there is a relationship between them.
-
-![](images/Screenshot%202024-05-05%20at%201.11.44%20PM.png){width="700"}
-
-<details>
-
-<summary>Code</summary>
-
-```{r,message = FALSE}
-# Contingency table of Weather, Light, and Injury Severity
-contingency_table <- table(data$Weather, data$Light, data$Injury.Severity)
-
-# Remove any empty dimensions
-contingency_table <- margin.table(contingency_table, c(1, 2))
-
-
-# Chi-square test of independence
-chi_square_test <- chisq.test(contingency_table)
-
-# Print the test results
-# print(chi_square_test)
-```
-
-</details>
-
-::: {style="text-align:justify"}
-**Interpretation of Results**: To analyze this, a Pearson's Chi-squared test was conducted on the contingency table. The output indicates a significant relationship between these variables, with a very low p-value (p \< 2.2e-16). This suggests that the observed frequencies of injury severity across different weather conditions and daylight statuses are unlikely to have occurred by chance alone, indicating a strong association between these factors.
-:::
-
-## visualization3 : Top 10 cars which involve in car cashes?
-
-![](images/2.png)
-
-<details>
-
-<summary>Code</summary>
-
-```{r,message = FALSE}
-vehicle_counts <- data %>%
-  group_by(Vehicle.Make) %>%
-  summarise(count = n()) %>%
-  arrange(desc(count)) # Sort by count in descending order
-
-# Take the top N most common vehicle makes for better visualization
-top_n <- 10 # You can adjust this value as needed
-
-top_vehicle_counts <- vehicle_counts %>%
-  top_n(top_n, count)
-
-plot2 = ggplot(top_vehicle_counts, aes(x = reorder(Vehicle.Make, count), y = count)) +
-  geom_bar(stat = "identity", fill = "blue") +  # Stacked bar plot with blue color
-  labs(title = "Top 10 Most Common Vehicle Makes in Accidents",
-       x = "Vehicle Make",
-       y = "Number of Accidents") +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1),
-        axis.text = element_text(size = 14)) +  # Adjust text size
-  coord_flip() +  # Flip x and y axis
-  ylim(0, max(top_vehicle_counts$count) * 1.1)
-# plot2
-```
-
-</details>
-
-### Columns Used : 
-
--   count: This variable represents the number of accidents associated with each vehicle make. It is the variable of interest that we are analyzing and visualizing in the plot.
--   Vehicle.Make: This variable represents the make or manufacturer of the vehicles involved in accidents. It serves as the predictor variable in this analysis, as it is used to group the data and determine the count of accidents for each vehicle make.
-
-::: {style="text-align:justify"}
-**Explanation of the Code:** This generates a bar plot showing the top 10 most common vehicle makes involved in accidents, with vehicle make names on the y-axis and the number of accidents on the x-axis. It uses dplyr to summarize and arrange the data, then ggplot2 for visualization.
-:::
-
-## hypo#2. Are certain types of vehicles more likely to be involved in collisions at night compared to during the day?
-
-The code aims to determine whether certain types of vehicles are more likely to be involved in collisions at night compared to during the day. Here's a clear interpretation of the analysis:
-
-1.  **Daylight Collisions**: This subset represents collisions that occurred during daylight hours.
-
-2.  **Nighttime Collisions with Lights On**: This subset represents collisions that occurred at night with lights on.
-
-**Chi-Square Test**: A chi-square test of independence is performed to assess whether there is a significant association between vehicle types and the time of the collision (day or night).
-
-![](images/Screenshot%202024-05-05%20at%201.13.10%20PM.png){width="696"}
-
-<details>
-
-<summary>Code</summary>
-
-```{r,message = FALSE}
-# Subset data for collisions during the day and at night
-collisions_day <- subset(data, Light == "DAYLIGHT")
-collisions_night <- subset(data, Light == "DARK LIGHTS ON")
-
-# Get the counts of each vehicle type for day and night collisions
-counts_day <- table(collisions_day$Vehicle.Body.Type)
-counts_night <- table(collisions_night$Vehicle.Body.Type)
-
-# Perform chi-square test of independence
-chi_square_test <- chisq.test(counts_day, counts_night)
-
-# Print the test results
-# print(chi_square_test)
-```
-
-</details>
-
-::: {style="text-align:justify"}
-**Interpretation of Results**: To analyze this, a Pearson's Chi-squared test was conducted comparing the counts of collisions involving different types of vehicles during the day and at night. The output indicates that there is no significant difference in the distribution of collisions across different types of vehicles between day and night, with a p-value of 0.2408. This suggests that the likelihood of different types of vehicles being involved in collisions is similar during both day and night.
-:::
-
-## hypo#3. Do drivers distracted by electronic devices have a higher rate of collisions compared to drivers distracted by other factors?
-
-The analysis aims to determine whether drivers distracted by electronic devices have a higher rate of collisions compared to drivers distracted by other factors. Here's a clear interpretation of the results:
-
-1.  **Driver.Distracted.By**: This variable indicates the factor(s) distracting the driver at the time of the collision. In this analysis, it's used to differentiate between collisions involving electronic device distractions and those involving other distractions.
-
-2.  **Collision Counts by Distraction Type**:
-
--   **counts_electronic**: This represents the count of collisions where the driver was distracted by electronic devices.
-
--   **counts_other**: This represents the count of collisions where the driver was distracted by factors other than electronic devices.
-
-**Chi-Square Test**: A chi-square test of independence is performed to assess whether there is a significant difference in collision rates between the two groups of drivers.
-
-![](images/Screenshot%202024-05-05%20at%201.18.00%20PM.png){width="696"}
-
-<details>
-
-<summary>Code</summary>
-
-```{r,message = FALSE}
-# Subset the data for drivers distracted by electronic devices
-electronic_distracted <- subset(data, Driver.Distracted.By == "ELECTRONIC DEVICE")
-
-# Subset the data for drivers distracted by other factors
-other_distracted <- subset(data, Driver.Distracted.By != "ELECTRONIC DEVICE" & Driver.Distracted.By != "NOT DISTRACTED")
-
-# Count the number of collisions for each distraction type
-counts_electronic <- nrow(electronic_distracted)
-counts_other <- nrow(other_distracted)
-
-# Perform chi-square test
-chi_square_test <- chisq.test(c(counts_electronic, counts_other))
-
-# Print the test results
-# print(chi_square_test)
-```
-
-</details>
-
-::: {style="text-align:justify"}
-**Interpretation of Results**: The question aims to determine if drivers distracted by electronic devices have a higher collision rate compared to those distracted by other factors. To analyze this, a Chi-squared test was conducted comparing the collision counts between drivers distracted by electronic devices and those distracted by other factors. The output indicates a significant difference between the two groups, with a very low p-value (p \< 2.2e-16). This suggests that drivers distracted by electronic devices indeed have a significantly higher collision rate compared to those distracted by other factors.
-:::
-
-<details>
-
 ## hypo#4: Can we determine the effectiveness of different traffic control measures (Traffic.Control) in reducing collision rates? Which types of traffic controls are most effective in preventing collisions?
 
-![](images/Screenshot%202024-05-05%20at%201.21.19%20PM.png)
+![](images/12.png)
+
+::: {style="text-align:justify"}
+**Interpretation of Results**: To analyze this, a Pearson's Chi-squared test was conducted between the types of traffic control measures and the severity of injuries resulting from collisions. The output shows a significant relationship between the two variables, with a very low p-value (p \< 2.2e-16). This suggests that the effectiveness of traffic control measures in preventing collisions varies significantly across different types. However, further analysis would be needed to determine which specific types of traffic controls are most effective in reducing collision rates and severity of injuries.
+:::
 
 **Column used:**
 
@@ -301,9 +135,9 @@ collision_rates <- collision_counts %>%
 
 # Statistical Analysis
 # Perform chi-square test to compare collision rates between different traffic controls
-chi_square_test <- chisq.test(traffic_data$Traffic.Control, traffic_data$Injury.Severity)
+# chi_square_test <- chisq.test(traffic_data$Traffic.Control, traffic_data$Injury.Severity)
 
-# print(chi_square_test)
+print(chi_square_test)
 # Visualization
 par(mfrow=c(1, 2))  # Set up a 1x2 plotting grid
 
@@ -320,9 +154,257 @@ plot3 = ggplot(collision_counts, aes(x = reorder(Traffic.Control, -Collision_Cou
 
 </details>
 
-::: {style="text-align:justify"}
-**Interpretation of Results**: To analyze this, a Pearson's Chi-squared test was conducted between the types of traffic control measures and the severity of injuries resulting from collisions. The output shows a significant relationship between the two variables, with a very low p-value (p \< 2.2e-16). This suggests that the effectiveness of traffic control measures in preventing collisions varies significantly across different types. However, further analysis would be needed to determine which specific types of traffic controls are most effective in reducing collision rates and severity of injuries.
-:::
+### Pre1# Can we predict the severity of injuries based on various factors such as weather conditions, road surface conditions, and collision type?
+
+-   **Predictor Variables**: These are the factors or features used in a statistical model to predict or explain the outcome variable. In this context, "Weather," "Surface.Condition," and "Collision.Type" are predictors as they are hypothesized to influence the severity of crashes.
+
+-   **Response Variable**: This is the outcome variable that the model aims to predict or explain. In this case, "Injury.Severity" represents the severity of injuries resulting from crashes. The model aims to understand how the predictor variables relate to the severity of injuries.
+
+### Data Pre Processing :
+
+```{r}
+# Load required library
+library(randomForest)
+library(caret)
+
+# Assuming your dataset is named 'data'
+
+# Select relevant columns for modeling
+selected_cols <- c("Weather", "Surface.Condition", "Collision.Type", "Injury.Severity")
+
+# Subset the data
+subset_data <- data[selected_cols]
+
+# Remove rows with any missing values
+subset_data_clean <- subset_data[complete.cases(subset_data), ]
+
+subset_data_clean
+```
+
+### Data Pro Processing:
+
+```{r}
+# Convert 'N/A' strings to NA
+subset_data_clean[subset_data_clean == "N/A"] <- NA
+
+# Remove rows with any missing values
+subset_data_clean <- na.omit(subset_data_clean)
+
+# Check if there are any missing values left
+print(sum(is.na(subset_data_clean)))
+
+subset_data_clean
+```
+
+```{r}
+# Replace blank values with NA
+subset_data_clean[subset_data_clean == ""] <- NA
+
+# Remove rows with any missing values
+subset_data_clean <- na.omit(subset_data_clean)
+
+# Check if there are any missing values left
+print(sum(is.na(subset_data_clean)))
+```
+
+```{r}
+subset_data_clean
+```
+
+```{r}
+# Convert all columns to factors
+subset_data_clean <- as.data.frame(lapply(subset_data_clean, as.factor))
+
+# Verify the conversion
+str(subset_data_clean)
+```
+
+### using Random Forest model
+
+```{r}
+# Load required library
+library(randomForest)
+library(caret)
+
+str(subset_data_clean)
+# Set seed for reproducibility
+set.seed(123)
+
+# Split the data into training and testing sets
+train_indices <- createDataPartition(subset_data_clean$Injury.Severity, p = 0.8, list = FALSE)
+train_data <- subset_data_clean[train_indices, ]
+test_data <- subset_data_clean[-train_indices, ]
+train_data
+# Fit random forest model
+model <- randomForest(Injury.Severity ~ ., data = train_data, ntree = 500)
+
+# Print model summary
+print(model)
+```
+
+```{r}
+# Make predictions on the test set
+predictions <- predict(model, newdata = test_data)
+
+# Create confusion matrix
+conf_matrix <- table(predictions, test_data$Injury.Severity)
+
+# Calculate accuracy
+accuracy <- sum(diag(conf_matrix)) / sum(conf_matrix)
+```
+
+```{r}
+# Evaluate the model using confusion matrix
+conf_matrix <- table(test_data$Injury.Severity, predictions)
+
+# Calculate accuracy
+accuracy <- sum(diag(conf_matrix)) / sum(conf_matrix)
+
+# Print accuracy
+print(paste("Accuracy:", accuracy))
+```
+
+### Finding important factors
+
+```{r}
+importance(model)
+```
+
+```{r}
+varImpPlot(model)
+```
+
+```{r}
+# Predict on the test set
+predictions <- predict(model, newdata = test_data)
+
+# Confusion matrix
+conf_mat <- table(Actual = test_data$Injury.Severity, Predicted = predictions)
+print("Confusion Matrix:")
+print(conf_mat)
+
+# Accuracy
+accuracy <- sum(diag(conf_mat)) / sum(conf_mat)
+print(paste("Accuracy:", accuracy))
+
+# Precision
+precision <- diag(conf_mat) / colSums(conf_mat)
+print(paste("Precision:", precision))
+
+# Recall (Sensitivity)
+recall <- diag(conf_mat) / rowSums(conf_mat)
+print(paste("Recall:", recall))
+
+# F1-score
+f1_score <- 2 * (precision * recall) / (precision + recall)
+print(paste("F1-score:", f1_score))
+```
+
+### Pre1: logistics
+
+```{r}
+library(dplyr)
+
+# Assuming your dataset is named 'crash_data'
+
+# Select relevant columns for modeling
+selected_cols <- c("Weather", "Surface.Condition", "Collision.Type", "Injury.Severity")
+
+# Subset the data
+crash_data1 <- data[selected_cols]
+
+
+
+# Remove rows with any missing values
+crash_data1 <- crash_data1[complete.cases(crash_data1), ]
+
+crash_data1
+```
+
+### Data preprocessing
+
+```{r}
+# Convert 'N/A' strings to NA
+crash_data1[crash_data1 == "N/A"] <- NA
+
+# Remove rows with any missing values
+crash_data1 <- na.omit(crash_data1)
+
+# Check if there are any missing values left
+print(sum(is.na(crash_data1)))
+
+crash_data1
+```
+
+```{r}
+# Convert 'N/A' strings to NA
+crash_data1[crash_data1 == ""] <- NA
+
+# Remove rows with any missing values
+crash_data1 <- na.omit(crash_data1)
+
+# Check if there are any missing values left
+print(sum(is.na(crash_data1)))
+
+crash_data1
+```
+
+```{r}
+crash_data1$Severe_Injury <- ifelse(crash_data1$Injury.Severity %in% c("SUSPECTED MINOR INJURY", "SUSPECTED SERIOUS INJURY", "FATAL INJURY"), 1, 0)
+```
+
+```{r}
+crash_data1 <- crash_data1[, -which(names(crash_data1) == "Injury.Severity")]
+
+crash_data1
+```
+
+```{r}
+logistic_model <- glm(Severe_Injury ~ ., data = crash_data1, family = binomial)
+
+summary(logistic_model)
+```
+
+```{r}
+# Extract coefficients and standard errors
+coefficients <- summary(logistic_model)$coefficients[, "Estimate"]
+standard_errors <- summary(logistic_model)$coefficients[, "Std. Error"]
+
+# Predict probabilities using the logistic regression model
+predicted_probs <- predict(logistic_model, type = "response")
+
+# Convert probabilities to predicted classes
+predicted_classes <- ifelse(predicted_probs > 0.5, 1, 0)
+
+# Actual classes
+actual_classes <- crash_data1$Severe_Injury
+
+# Accuracy
+accuracy <- mean(predicted_classes == actual_classes)
+cat("Accuracy:", accuracy, "\n")
+
+# AUC-ROC
+library(pROC)
+roc_obj <- roc(actual_classes, predicted_probs)
+auc_roc <- auc(roc_obj)
+cat("AUC-ROC:", auc_roc, "\n")
+```
+
+### Model evaluation
+
+```{r}
+# Install and load the pROC package if you haven't already
+library(pROC)
+
+# Assuming 'predicted_probs' contains the predicted probabilities and 'actual_classes' contains the actual classes (0 or 1)
+roc_obj <- roc(actual_classes, predicted_probs)
+
+# Plot ROC curve
+plot(roc_obj, main = "ROC Curve", col = "blue")
+
+# Add text with AUC value
+# text(0.8, 0.2, paste("AUC =", round(auc(roc_obj), 4)), col = "blue")#
+```
 
 ### per#3: Find the locations of crashes using the K-means algorithm?
 
@@ -341,8 +423,6 @@ The elbow method suggests that the optimal number of clusters is 2, it means tha
 ::: {style="text-align:justify"}
 The two clusters represent two distinct geographical regions or patterns of accidents within the dataset. Red cluster might represent areas with high accident density, while the other cluster might represent areas with lower accident frequency.
 :::
-
-\###
 
 <details>
 
@@ -417,6 +497,176 @@ The two clusters represent two distinct geographical regions or patterns of acci
 ```
 
 </details>
+
+### ------------------------------------------
+
+## hypo#1. is there any relation between weather condition, day light on injury severity
+
+This test performs provided performs a chi-square test to determine whether there is a statistically significant association between weather condition, light condition, on injury severity, Here's an explanation of why this test was conducted and what was observed:
+
+1.  **Weather and Light**: This part of the analysis explores whether there's a relationship between weather conditions (e.g., clear, rainy, snowy) and light conditions (e.g., daylight, dark with street lights, dark without street lights). For instance, the test can indicate whether certain weather conditions are more likely to occur in conjunction with specific light conditions. A significant result suggests that weather and light conditions are not independent of each other.
+
+**Chi-Square Test**: The chi-square test is a statistical test used to determine whether there is a significant association between two categorical variables. In this case, the variables of interest are weather condition, light condition.
+
+**Observation**: By analyzing the contingency table generated from the data, which shows the frequency distribution of the combinations of weather condition, light condition, we can observe the following:
+
+-   The contingency table provides counts of the number of accidents for each combination of weather condition, light condition.
+
+-   The chi-square test is then applied to assess whether these variables are independent of each other or if there is a relationship between them.
+
+![](images/13.png)
+
+<details>
+
+<summary>Code</summary>
+
+```{r,message = FALSE}
+# Contingency table of Weather, Light, and Injury Severity
+contingency_table <- table(data$Weather, data$Light, data$Injury.Severity)
+
+# Remove any empty dimensions
+contingency_table <- margin.table(contingency_table, c(1, 2))
+
+
+# Chi-square test of independence
+chi_square_test <- chisq.test(contingency_table)
+
+# Print the test results
+print(chi_square_test)
+```
+
+</details>
+
+::: {style="text-align:justify"}
+**Interpretation of Results**: To analyze this, a Pearson's Chi-squared test was conducted on the contingency table. The output indicates a significant relationship between these variables, with a very low p-value (p \< 2.2e-16). This suggests that the observed frequencies of injury severity across different weather conditions and daylight statuses are unlikely to have occurred by chance alone, indicating a strong association between these factors.
+:::
+
+## visualization3 : Top 10 cars which involve in car cashes?
+
+![](images/2.png)
+
+<details>
+
+<summary>Code</summary>
+
+```{r,message = FALSE}
+vehicle_counts <- data %>%
+  group_by(Vehicle.Make) %>%
+  summarise(count = n()) %>%
+  arrange(desc(count)) # Sort by count in descending order
+
+# Take the top N most common vehicle makes for better visualization
+top_n <- 10 # You can adjust this value as needed
+
+top_vehicle_counts <- vehicle_counts %>%
+  top_n(top_n, count)
+
+plot2 = ggplot(top_vehicle_counts, aes(x = reorder(Vehicle.Make, count), y = count)) +
+  geom_bar(stat = "identity", fill = "blue") +  # Stacked bar plot with blue color
+  labs(title = "Top 10 Most Common Vehicle Makes in Accidents",
+       x = "Vehicle Make",
+       y = "Number of Accidents") +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        axis.text = element_text(size = 14)) +  # Adjust text size
+  coord_flip() +  # Flip x and y axis
+  ylim(0, max(top_vehicle_counts$count) * 1.1)
+# plot2
+```
+
+</details>
+
+### Columns Used :
+
+-   count: This variable represents the number of accidents associated with each vehicle make. It is the variable of interest that we are analyzing and visualizing in the plot.
+-   Vehicle.Make: This variable represents the make or manufacturer of the vehicles involved in accidents. It serves as the predictor variable in this analysis, as it is used to group the data and determine the count of accidents for each vehicle make.
+
+::: {style="text-align:justify"}
+**Explanation of the Code:** This generates a bar plot showing the top 10 most common vehicle makes involved in accidents, with vehicle make names on the y-axis and the number of accidents on the x-axis. It uses dplyr to summarize and arrange the data, then ggplot2 for visualization.
+:::
+
+## hypo#2. Are certain types of vehicles more likely to be involved in collisions at night compared to during the day?
+
+The code aims to determine whether certain types of vehicles are more likely to be involved in collisions at night compared to during the day. Here's a clear interpretation of the analysis:
+
+1.  **Daylight Collisions**: This subset represents collisions that occurred during daylight hours.
+
+2.  **Nighttime Collisions with Lights On**: This subset represents collisions that occurred at night with lights on.
+
+**Chi-Square Test**: A chi-square test of independence is performed to assess whether there is a significant association between vehicle types and the time of the collision (day or night).
+
+![](images/14.png)
+
+<details>
+
+<summary>Code</summary>
+
+```{r,message = FALSE}
+# Subset data for collisions during the day and at night
+collisions_day <- subset(data, Light == "DAYLIGHT")
+collisions_night <- subset(data, Light == "DARK LIGHTS ON")
+
+# Get the counts of each vehicle type for day and night collisions
+counts_day <- table(collisions_day$Vehicle.Body.Type)
+counts_night <- table(collisions_night$Vehicle.Body.Type)
+
+# Perform chi-square test of independence
+chi_square_test <- chisq.test(counts_day, counts_night)
+
+# Print the test results
+# print(chi_square_test)
+```
+
+</details>
+
+::: {style="text-align:justify"}
+**Interpretation of Results**: To analyze this, a Pearson's Chi-squared test was conducted comparing the counts of collisions involving different types of vehicles during the day and at night. The output indicates that there is no significant difference in the distribution of collisions across different types of vehicles between day and night, with a p-value of 0.2408. This suggests that the likelihood of different types of vehicles being involved in collisions is similar during both day and night.
+:::
+
+## hypo#3. Do drivers distracted by electronic devices have a higher rate of collisions compared to drivers distracted by other factors?
+
+The analysis aims to determine whether drivers distracted by electronic devices have a higher rate of collisions compared to drivers distracted by other factors. Here's a clear interpretation of the results:
+
+1.  **Driver.Distracted.By**: This variable indicates the factor(s) distracting the driver at the time of the collision. In this analysis, it's used to differentiate between collisions involving electronic device distractions and those involving other distractions.
+
+2.  **Collision Counts by Distraction Type**:
+
+-   **counts_electronic**: This represents the count of collisions where the driver was distracted by electronic devices.
+
+-   **counts_other**: This represents the count of collisions where the driver was distracted by factors other than electronic devices.
+
+**Chi-Square Test**: A chi-square test of independence is performed to assess whether there is a significant difference in collision rates between the two groups of drivers.
+
+![](images/11.png)
+
+<details>
+
+<summary>Code</summary>
+
+```{r,message = FALSE}
+# Subset the data for drivers distracted by electronic devices
+electronic_distracted <- subset(data, Driver.Distracted.By == "ELECTRONIC DEVICE")
+
+# Subset the data for drivers distracted by other factors
+other_distracted <- subset(data, Driver.Distracted.By != "ELECTRONIC DEVICE" & Driver.Distracted.By != "NOT DISTRACTED")
+
+# Count the number of collisions for each distraction type
+counts_electronic <- nrow(electronic_distracted)
+counts_other <- nrow(other_distracted)
+
+# Perform chi-square test
+chi_square_test <- chisq.test(c(counts_electronic, counts_other))
+
+# Print the test results
+# print(chi_square_test)
+```
+
+</details>
+
+::: {style="text-align:justify"}
+**Interpretation of Results**: The question aims to determine if drivers distracted by electronic devices have a higher collision rate compared to those distracted by other factors. To analyze this, a Chi-squared test was conducted comparing the collision counts between drivers distracted by electronic devices and those distracted by other factors. The output indicates a significant difference between the two groups, with a very low p-value (p \< 2.2e-16). This suggests that drivers distracted by electronic devices indeed have a significantly higher collision rate compared to those distracted by other factors.
+:::
+
+<details>
 
 ## visualization2 : How does the distribution of car accidents vary geographically?
 
