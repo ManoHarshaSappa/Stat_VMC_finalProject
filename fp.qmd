@@ -87,7 +87,7 @@ plot1 = ggplot(yearly_crash_data, aes(x = Year, y = Num_Crashes)) +
 **Explanation of the Code:** This visualizes the frequency of crashes per year using ggplot2 in R. Initially, it converts the "Crash_Date" column into a date format and extracts the year from it. Then, it groups the data by year and calculates the number of crashes that occurred each year.
 :::
 
-## hypo#4: Can we determine the effectiveness of different traffic control measures (Traffic.Control) in reducing collision rates? Which types of traffic controls are most effective in preventing collisions?
+## hypo#1: Can we determine the effectiveness of different traffic control measures (Traffic.Control) in reducing collision rates? Which types of traffic controls are most effective in preventing collisions?
 
 ![](images/12.png)
 
@@ -154,7 +154,7 @@ plot3 = ggplot(collision_counts, aes(x = reorder(Traffic.Control, -Collision_Cou
 
 </details>
 
-### Pre1# Can we predict the severity of injuries based on various factors such as weather conditions, road surface conditions, and collision type?
+## Pre1# Can we predict the severity of injuries based on various factors such as weather conditions, road surface conditions, and collision type?
 
 -   **Predictor Variables**: These are the factors or features used in a statistical model to predict or explain the outcome variable. In this context, "Weather," "Surface.Condition," and "Collision.Type" are predictors as they are hypothesized to influence the severity of crashes.
 
@@ -200,7 +200,10 @@ plot3 = ggplot(collision_counts, aes(x = reorder(Traffic.Control, -Collision_Cou
 Using logistic regression to make our model better means it's getting better at guessing correctly and telling the difference between things. It's like it's learning to understand the data more accurately. So, when we see accuracy and AUC (another way to measure how good it is) going up, it's a sign that our model is getting smarter and more reliable at its job.
 :::
 
-<details><summary>Code</summary>
+<details>
+
+<summary>Code</summary>
+
 ```{r}
 # Load required library
 # library(randomForest)
@@ -399,8 +402,7 @@ Using logistic regression to make our model better means it's getting better at 
 
 </details>
 
-
-### per#3: Find the locations of crashes using the K-means algorithm?
+## Pre2: Find the locations of crashes using the K-means algorithm?
 
 ::: {style="text-align:justify"}
 First, we import some tools we need, like ggplot2 for making graphs and dplyr for managing data. Next, We pick out the latitude and longitude data from our dataset. This helps us group locations based on where they are.
@@ -503,9 +505,51 @@ The two clusters represent two distinct geographical regions or patterns of acci
 
 #plot5
 ```
+
 </details>
 
+## Visualization2 : How does the distribution of car accidents vary geographically?
 
+```{r,message = FALSE,echo=FALSE}
+library(leaflet)
+data <- read.csv('/Users/manoharshasappa/Desktop/Stat_Final_project de/CrashReportingDriversData.csv')
+data <- na.omit(data) 
+map <- leaflet(data) %>%
+  addTiles() %>%
+  addCircleMarkers(
+    lng = ~Longitude,
+    lat = ~Latitude,
+    popup = ~as.character(Report.Number),
+    label = ~as.character(Report.Number))
+
+#Print the map
+map
+```
+<details>
+<summary>Code</summary>
+```{r,message = FALSE,echo=FALSE}
+# library(leaflet)
+#data <- read.csv('/Users/manoharshasappa/Desktop/Stat_Final_project de/CrashReportingDriversData.csv')
+#data <- na.omit(data) 
+#map <- leaflet(data) %>%
+  #addTiles() %>%
+  #addCircleMarkers(
+    #lng = ~Longitude,
+    #lat = ~Latitude,
+    #popup = ~as.character(Report.Number),
+    #label = ~as.character(Report.Number))
+
+# Print the map
+#map
+```
+
+</details>
+
+::: {style="text-align:justify"}
+\- Latitude and Longitude: These variables represent the geographical coordinates of the crash locations. They serve as predictor variables as they are used to specify the locations where circle markers will be placed on the map.
+
+**Explanation of the Code:** This utilizes the Leaflet package in R to generate an interactive map. It begins by loading Leaflet and then initializes a map object. Using latitude and longitude data from a dataframe named 'data', it places circle markers on the map to represent specific locations, like crash sites. Each marker includes a popup and label showing the associated report number. Finally, it prints the interactive map, allowing users to explore the locations and corresponding report numbers within the R environment.
+:::
 <details>
 
 <summary>Some More Questions</summary>
@@ -641,27 +685,4 @@ The two clusters represent two distinct geographical regions or patterns of acci
 #**Interpretation of Results**: The question aims to determine if drivers distracted by electronic devices have a higher collision rate compared to those distracted by other factors. To analyze this, a Chi-squared test was conducted comparing the collision counts between drivers distracted by electronic devices and those distracted by other factors. The output indicates a significant difference between the two groups, with a very low p-value (p \< 2.2e-16). This suggests that drivers distracted by electronic devices indeed have a significantly higher collision rate compared to those distracted by other factors.
 ```
 
-```{r}
-## visualization2 : How does the distribution of car accidents vary geographically?
-
-# library(leaflet)
-#data <- read.csv('/Users/manoharshasappa/Desktop/Stat_Final_project de/CrashReportingDriversData.csv')
-#data <- na.omit(data) 
-#map <- leaflet(data) %>%
-  #addTiles() %>%
-  #addCircleMarkers(
-    #lng = ~Longitude,
-    #lat = ~Latitude,
-    #popup = ~as.character(Report.Number),
-    #label = ~as.character(Report.Number))
-
-# Print the map
-# map
-
-# -   Latitude and Longitude: These variables represent the geographical coordinates of the crash locations. They serve as predictor variables as they are used to specify the locations where circle markers will be placed on the map.
-
-# **Explanation of the Code:** This utilizes the Leaflet package in R to generate an interactive map. It begins by loading Leaflet and then initializes a map object. Using latitude and longitude data from a dataframe named 'data', it places circle markers on the map to represent specific locations, like crash sites. Each marker includes a popup and label showing the associated report number. Finally, it prints the interactive map, allowing users to explore the locations and corresponding report numbers within the R environment.
-
-
-```
 </details>
