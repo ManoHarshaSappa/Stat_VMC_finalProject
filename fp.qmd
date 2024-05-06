@@ -28,7 +28,7 @@ Ultimately, our aim is to use this knowledge to inform strategies and interventi
 
 ## Research Questions :
 
-## Visualization : What are the trends in the frequency of car crashes over years?
+## Visualization1 : What are the trends in the frequency of car crashes over years?
 
 ### Graph:
 
@@ -100,10 +100,10 @@ plot1 = ggplot(yearly_crash_data, aes(x = Year, y = Num_Crashes)) +
 ![](images/hy4.png)
 
 **Column used:**
-::: {style="text-align:justify"}
+
 -   **Collision_Count:** This variable represents the count of collisions for each type of traffic control. It is the response variable as it reflects the outcome of interest, i.e., the number of collisions categorized by the type of traffic control.
 -   **Traffic.Control:** This variable represents different types of traffic controls (e.g., stop sign, traffic signal). It serves as the predictor variable as it is used to categorize and group the collisions based on the type of traffic control present at the collision location.
-:::
+
 <details>
 
 <summary>code</summary>

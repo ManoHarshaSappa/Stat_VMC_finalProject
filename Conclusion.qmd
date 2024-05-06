@@ -12,8 +12,9 @@ In conclusion, the Research Design encompasses a comprehensive methodology to in
 
 ## Future Questions:
 
-1.  How do collisions contribute to environmental pollution and habitat destruction, and how can this information be used to guide urban planning and development decisions?
-2.  How can data from in-vehicle telematics systems be integrated with collision data to provide more accurate risk assessments?
+#### 1. How do collisions contribute to environmental pollution and habitat destruction, and how can this information be used to guide urban planning and development decisions?
+
+#### 2. How can data from in-vehicle telematics systems be integrated with collision data to provide more accurate risk assessments?
 
 ## References:
 
