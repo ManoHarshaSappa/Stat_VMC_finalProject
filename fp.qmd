@@ -114,13 +114,13 @@ traffic_data <- data[, c("Traffic.Control", "Injury.Severity")]
 # Remove rows with any missing values
 traffic_data <- na.omit(traffic_data)
 
-library(ggplot2)
-library(dplyr)
+#library(ggplot2)
+#library(dplyr)
 
-traffic_data[traffic_data == "N/A"] <- NA
+#traffic_data[traffic_data == "N/A"] <- NA
 
 # Remove rows with any missing values
-traffic_data <- na.omit(traffic_data)
+#traffic_data <- na.omit(traffic_data)
 
 # Check if there are any missing values left
 print(sum(is.na(traffic_data)))
@@ -129,26 +129,26 @@ collision_counts <- traffic_data %>%
   summarise(Collision_Count = n())
 
 # Calculate collision rates for each traffic control type
-total_collisions <- nrow(traffic_data)
-collision_rates <- collision_counts %>%
-  mutate(Collision_Rate = Collision_Count / total_collisions)
+#total_collisions <- nrow(traffic_data)
+#collision_rates <- collision_counts %>%
+  #mutate(Collision_Rate = Collision_Count / total_collisions)
 
 # Statistical Analysis
 # Perform chi-square test to compare collision rates between different traffic controls
-chi_square_test <- chisq.test(traffic_data$Traffic.Control, traffic_data$Injury.Severity)
+# chi_square_test <- chisq.test(traffic_data$Traffic.Control, traffic_data$Injury.Severity)
 
 # print(chi_square_test)
 # Visualization
 # par(mfrow=c(1, 2))  # Set up a 1x2 plotting grid
 
 # Create a bar plot using ggplot2
-plot3 = ggplot(collision_counts, aes(x = reorder(Traffic.Control, -Collision_Count), y = Collision_Count)) +
-  geom_bar(stat = "identity", fill = "skyblue") +
-  labs(title = "Collision Counts by Traffic Control Type",
-       x = "Traffic Control Type",
-       y = "Collision Count") +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+#plot3 = ggplot(collision_counts, aes(x = reorder(Traffic.Control, -Collision_Count), y = Collision_Count)) +
+  #geom_bar(stat = "identity", fill = "skyblue") +
+  #labs(title = "Collision Counts by Traffic Control Type",
+      # x = "Traffic Control Type",
+       #y = "Collision Count") +
+  #theme_minimal() +
+  #theme(axis.text.x = element_text(angle = 45, hjust = 1))
 # plot3
 ```
 
