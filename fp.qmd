@@ -108,7 +108,7 @@ plot1 = ggplot(yearly_crash_data, aes(x = Year, y = Num_Crashes)) +
 
 <summary>Code</summary>
 
-```{r,message = FALSE}
+```{r}
 # Subset the dataset to include only the required columns
 traffic_data <- data[, c("Traffic.Control", "Injury.Severity")]
 # Remove rows with any missing values
@@ -135,11 +135,11 @@ collision_rates <- collision_counts %>%
 
 # Statistical Analysis
 # Perform chi-square test to compare collision rates between different traffic controls
-# chi_square_test <- chisq.test(traffic_data$Traffic.Control, traffic_data$Injury.Severity)
+chi_square_test <- chisq.test(traffic_data$Traffic.Control, traffic_data$Injury.Severity)
 
-print(chi_square_test)
+# print(chi_square_test)
 # Visualization
-par(mfrow=c(1, 2))  # Set up a 1x2 plotting grid
+# par(mfrow=c(1, 2))  # Set up a 1x2 plotting grid
 
 # Create a bar plot using ggplot2
 plot3 = ggplot(collision_counts, aes(x = reorder(Traffic.Control, -Collision_Count), y = Collision_Count)) +
@@ -162,251 +162,253 @@ plot3 = ggplot(collision_counts, aes(x = reorder(Traffic.Control, -Collision_Cou
 
 ### Data Pre Processing :
 
+![](images/100.png)
+
+#### In this step, we are replacing character variables containing the text "N/A" with actual Null Values
+
+![](images/101.png)
+
+#### We're replacing missing values with null values and then eliminating those null values from the dataset.
+
+![](images/103.png)
+
+### Accuracy :
+
+![](images/104.png)
+
+###kasdfdsf
+
+![](images/105.png)
+
+### Variable importance plot:
+
+![](images/107.png)
+
+![](images/111.png)
+
+### Model Evaluation & Improving:
+
+![](images/109.png){width="701"}
+
+### Graph :
+
+![](images/108.png)
+
+### interpretation
+
+::: {style="text-align:justify"}
+Using logistic regression to make our model better means it's getting better at guessing correctly and telling the difference between things. It's like it's learning to understand the data more accurately. So, when we see accuracy and AUC (another way to measure how good it is) going up, it's a sign that our model is getting smarter and more reliable at its job.
+:::
+
+<details><summary>Code</summary>
 ```{r}
 # Load required library
-library(randomForest)
-library(caret)
+# library(randomForest)
+# library(caret)
 
 # Assuming your dataset is named 'data'
 
 # Select relevant columns for modeling
-selected_cols <- c("Weather", "Surface.Condition", "Collision.Type", "Injury.Severity")
+# selected_cols <- c("Weather", "Surface.Condition", "Collision.Type", "Injury.Severity")
 
 # Subset the data
-subset_data <- data[selected_cols]
+# subset_data <- data[selected_cols]
 
+# subset_data
 # Remove rows with any missing values
-subset_data_clean <- subset_data[complete.cases(subset_data), ]
+# subset_data_clean <- subset_data[complete.cases(subset_data), ]
 
-subset_data_clean
-```
+# subset_data_clean
 
-### Data Pro Processing:
-
-```{r}
 # Convert 'N/A' strings to NA
-subset_data_clean[subset_data_clean == "N/A"] <- NA
+# subset_data_clean[subset_data_clean == "N/A"] <- NA
 
 # Remove rows with any missing values
-subset_data_clean <- na.omit(subset_data_clean)
+# subset_data_clean <- na.omit(subset_data_clean)
+
 
 # Check if there are any missing values left
-print(sum(is.na(subset_data_clean)))
+# print(sum(is.na(subset_data_clean)))
 
-subset_data_clean
-```
+# subset_data_clean
 
-```{r}
 # Replace blank values with NA
-subset_data_clean[subset_data_clean == ""] <- NA
+# subset_data_clean[subset_data_clean == ""] <- NA
 
 # Remove rows with any missing values
-subset_data_clean <- na.omit(subset_data_clean)
+# subset_data_clean <- na.omit(subset_data_clean)
 
 # Check if there are any missing values left
-print(sum(is.na(subset_data_clean)))
-```
+# print(sum(is.na(subset_data_clean)))
 
-```{r}
-subset_data_clean
-```
+# subset_data_clean
 
-```{r}
 # Convert all columns to factors
-subset_data_clean <- as.data.frame(lapply(subset_data_clean, as.factor))
+# subset_data_clean <- as.data.frame(lapply(subset_data_clean, as.factor))
 
 # Verify the conversion
-str(subset_data_clean)
-```
+# str(subset_data_clean)
 
-### using Random Forest model
-
-```{r}
 # Load required library
-library(randomForest)
-library(caret)
+# library(randomForest)
+# library(caret)
 
-str(subset_data_clean)
+# str(subset_data_clean)
 # Set seed for reproducibility
-set.seed(123)
+# set.seed(123)
 
 # Split the data into training and testing sets
-train_indices <- createDataPartition(subset_data_clean$Injury.Severity, p = 0.8, list = FALSE)
-train_data <- subset_data_clean[train_indices, ]
-test_data <- subset_data_clean[-train_indices, ]
-train_data
+# train_indices <- createDataPartition(subset_data_clean$Injury.Severity, p = 0.8, list = FALSE)
+# train_data <- subset_data_clean[train_indices, ]
+# test_data <- subset_data_clean[-train_indices, ]
+# train_data
 # Fit random forest model
-model <- randomForest(Injury.Severity ~ ., data = train_data, ntree = 500)
+# model <- randomForest(Injury.Severity ~ ., data = train_data, ntree = 500)
 
 # Print model summary
-print(model)
-```
+# print(model)
 
-```{r}
 # Make predictions on the test set
-predictions <- predict(model, newdata = test_data)
+# predictions <- predict(model, newdata = test_data)
 
 # Create confusion matrix
-conf_matrix <- table(predictions, test_data$Injury.Severity)
+# conf_matrix <- table(predictions, test_data$Injury.Severity)
 
 # Calculate accuracy
-accuracy <- sum(diag(conf_matrix)) / sum(conf_matrix)
-```
+# accuracy <- sum(diag(conf_matrix)) / sum(conf_matrix)
 
-```{r}
 # Evaluate the model using confusion matrix
-conf_matrix <- table(test_data$Injury.Severity, predictions)
+# conf_matrix <- table(test_data$Injury.Severity, predictions)
 
 # Calculate accuracy
-accuracy <- sum(diag(conf_matrix)) / sum(conf_matrix)
+# accuracy <- sum(diag(conf_matrix)) / sum(conf_matrix)
 
 # Print accuracy
-print(paste("Accuracy:", accuracy))
-```
+# print(paste("Accuracy:", accuracy))
 
-### Finding important factors
+# importance(model)
 
-```{r}
-importance(model)
-```
+# varImpPlot(model)
 
-```{r}
-varImpPlot(model)
-```
-
-```{r}
 # Predict on the test set
-predictions <- predict(model, newdata = test_data)
+# predictions <- predict(model, newdata = test_data)
 
 # Confusion matrix
-conf_mat <- table(Actual = test_data$Injury.Severity, Predicted = predictions)
-print("Confusion Matrix:")
-print(conf_mat)
+# conf_mat <- table(Actual = test_data$Injury.Severity, Predicted = predictions)
+# print("Confusion Matrix:")
+# print(conf_mat)
 
 # Accuracy
-accuracy <- sum(diag(conf_mat)) / sum(conf_mat)
-print(paste("Accuracy:", accuracy))
+# accuracy <- sum(diag(conf_mat)) / sum(conf_mat)
+# print(paste("Accuracy:", accuracy))
 
 # Precision
-precision <- diag(conf_mat) / colSums(conf_mat)
-print(paste("Precision:", precision))
+# precision <- diag(conf_mat) / colSums(conf_mat)
+# print(paste("Precision:", precision))
 
 # Recall (Sensitivity)
-recall <- diag(conf_mat) / rowSums(conf_mat)
-print(paste("Recall:", recall))
+# recall <- diag(conf_mat) / rowSums(conf_mat)
+# print(paste("Recall:", recall))
 
 # F1-score
-f1_score <- 2 * (precision * recall) / (precision + recall)
-print(paste("F1-score:", f1_score))
-```
+# f1_score <- 2 * (precision * recall) / (precision + recall)
+# print(paste("F1-score:", f1_score))
 
-### Pre1: logistics
-
-```{r}
-library(dplyr)
+# library(dplyr)
 
 # Assuming your dataset is named 'crash_data'
 
 # Select relevant columns for modeling
-selected_cols <- c("Weather", "Surface.Condition", "Collision.Type", "Injury.Severity")
+# selected_cols <- c("Weather", "Surface.Condition", "Collision.Type", "Injury.Severity")
 
 # Subset the data
-crash_data1 <- data[selected_cols]
+# crash_data1 <- data[selected_cols]
 
 
 
 # Remove rows with any missing values
-crash_data1 <- crash_data1[complete.cases(crash_data1), ]
+# crash_data1 <- crash_data1[complete.cases(crash_data1), ]
 
-crash_data1
-```
+# crash_data1
 
-### Data preprocessing
-
-```{r}
 # Convert 'N/A' strings to NA
-crash_data1[crash_data1 == "N/A"] <- NA
+# crash_data1[crash_data1 == "N/A"] <- NA
 
 # Remove rows with any missing values
-crash_data1 <- na.omit(crash_data1)
+# crash_data1 <- na.omit(crash_data1)
 
 # Check if there are any missing values left
-print(sum(is.na(crash_data1)))
+# print(sum(is.na(crash_data1)))
 
-crash_data1
-```
+# crash_data1
 
-```{r}
 # Convert 'N/A' strings to NA
-crash_data1[crash_data1 == ""] <- NA
+# crash_data1[crash_data1 == ""] <- NA
 
 # Remove rows with any missing values
-crash_data1 <- na.omit(crash_data1)
+# crash_data1 <- na.omit(crash_data1)
 
 # Check if there are any missing values left
-print(sum(is.na(crash_data1)))
+# print(sum(is.na(crash_data1)))
 
-crash_data1
-```
+# crash_data1
 
-```{r}
-crash_data1$Severe_Injury <- ifelse(crash_data1$Injury.Severity %in% c("SUSPECTED MINOR INJURY", "SUSPECTED SERIOUS INJURY", "FATAL INJURY"), 1, 0)
-```
+# crash_data1 <- crash_data1[, -which(names(crash_data1) == "Injury.Severity")]
 
-```{r}
-crash_data1 <- crash_data1[, -which(names(crash_data1) == "Injury.Severity")]
+# crash_data1
 
-crash_data1
-```
+# logistic_model <- glm(Severe_Injury ~ ., data = crash_data1, family = binomial)
 
-```{r}
-logistic_model <- glm(Severe_Injury ~ ., data = crash_data1, family = binomial)
+# summary(logistic_model)
 
-summary(logistic_model)
-```
-
-```{r}
 # Extract coefficients and standard errors
-coefficients <- summary(logistic_model)$coefficients[, "Estimate"]
-standard_errors <- summary(logistic_model)$coefficients[, "Std. Error"]
+# coefficients <- summary(logistic_model)$coefficients[, "Estimate"]
+# standard_errors <- summary(logistic_model)$coefficients[, "Std. Error"]
 
 # Predict probabilities using the logistic regression model
-predicted_probs <- predict(logistic_model, type = "response")
+# predicted_probs <- predict(logistic_model, type = "response")
 
 # Convert probabilities to predicted classes
-predicted_classes <- ifelse(predicted_probs > 0.5, 1, 0)
+# predicted_classes <- ifelse(predicted_probs > 0.5, 1, 0)
 
 # Actual classes
-actual_classes <- crash_data1$Severe_Injury
+# actual_classes <- crash_data1$Severe_Injury
 
 # Accuracy
-accuracy <- mean(predicted_classes == actual_classes)
-cat("Accuracy:", accuracy, "\n")
+# accuracy <- mean(predicted_classes == actual_classes)
+# cat("Accuracy:", accuracy, "\n")
 
 # AUC-ROC
-library(pROC)
-roc_obj <- roc(actual_classes, predicted_probs)
-auc_roc <- auc(roc_obj)
-cat("AUC-ROC:", auc_roc, "\n")
-```
+# library(pROC)
+# roc_obj <- roc(actual_classes, predicted_probs)
+# auc_roc <- auc(roc_obj)
+# cat("AUC-ROC:", auc_roc, "\n")
 
-### Model evaluation
-
-```{r}
 # Install and load the pROC package if you haven't already
-library(pROC)
+# library(pROC)
 
 # Assuming 'predicted_probs' contains the predicted probabilities and 'actual_classes' contains the actual classes (0 or 1)
-roc_obj <- roc(actual_classes, predicted_probs)
+# roc_obj <- roc(actual_classes, predicted_probs)
 
 # Plot ROC curve
-plot(roc_obj, main = "ROC Curve", col = "blue")
+# plot(roc_obj, main = "ROC Curve", col = "blue")
 
 # Add text with AUC value
 # text(0.8, 0.2, paste("AUC =", round(auc(roc_obj), 4)), col = "blue")#
 ```
 
+</details>
+
+
 ### per#3: Find the locations of crashes using the K-means algorithm?
+
+::: {style="text-align:justify"}
+First, we import some tools we need, like ggplot2 for making graphs and dplyr for managing data. Next, We pick out the latitude and longitude data from our dataset. This helps us group locations based on where they are.
+
+We adjust the data so it's all on the same scale. This helps us compare things more easily. It's like making sure all the ingredients for a recipe are measured in the same units.
+
+We try out different numbers of clusters to see which one works best. Think of it like trying to find the best number of groups for organizing your things. We use a method called the "elbow method" to help us decide.
+:::
 
 ### Graph: Elbow Method - K means
 
@@ -421,6 +423,12 @@ The elbow method suggests that the optimal number of clusters is 2, it means tha
 ![](images/4.png)
 
 ::: {style="text-align:justify"}
+Once we figure out that two clusters are best for our data, we use a method called K-Means to group similar points together. It's like sorting marbles into different colored bags based on how close they are to each other.
+
+Then, we tag each point with the cluster it belongs to. This lets us study and show which accidents are in which group.
+
+Lastly, we make a picture showing all the accident spots. Each spot is colored according to its cluster, so we can see how they're grouped together on a map. It helps us see patterns in where accidents happen.
+
 The two clusters represent two distinct geographical regions or patterns of accidents within the dataset. Red cluster might represent areas with high accident density, while the other cluster might represent areas with lower accident frequency.
 :::
 
@@ -498,7 +506,6 @@ The two clusters represent two distinct geographical regions or patterns of acci
 
 </details>
 
-### ------------------------------------------
 
 ## hypo#1. is there any relation between weather condition, day light on injury severity
 
@@ -516,10 +523,6 @@ This test performs provided performs a chi-square test to determine whether ther
 
 ![](images/13.png)
 
-<details>
-
-<summary>Code</summary>
-
 ```{r,message = FALSE}
 # Contingency table of Weather, Light, and Injury Severity
 contingency_table <- table(data$Weather, data$Light, data$Injury.Severity)
@@ -535,8 +538,6 @@ chi_square_test <- chisq.test(contingency_table)
 print(chi_square_test)
 ```
 
-</details>
-
 ::: {style="text-align:justify"}
 **Interpretation of Results**: To analyze this, a Pearson's Chi-squared test was conducted on the contingency table. The output indicates a significant relationship between these variables, with a very low p-value (p \< 2.2e-16). This suggests that the observed frequencies of injury severity across different weather conditions and daylight statuses are unlikely to have occurred by chance alone, indicating a strong association between these factors.
 :::
@@ -544,10 +545,6 @@ print(chi_square_test)
 ## visualization3 : Top 10 cars which involve in car cashes?
 
 ![](images/2.png)
-
-<details>
-
-<summary>Code</summary>
 
 ```{r,message = FALSE}
 vehicle_counts <- data %>%
@@ -573,8 +570,6 @@ plot2 = ggplot(top_vehicle_counts, aes(x = reorder(Vehicle.Make, count), y = cou
 # plot2
 ```
 
-</details>
-
 ### Columns Used :
 
 -   count: This variable represents the number of accidents associated with each vehicle make. It is the variable of interest that we are analyzing and visualizing in the plot.
@@ -594,33 +589,28 @@ The code aims to determine whether certain types of vehicles are more likely to 
 
 **Chi-Square Test**: A chi-square test of independence is performed to assess whether there is a significant association between vehicle types and the time of the collision (day or night).
 
-![](images/14.png)
 
-<details>
-
-<summary>Code</summary>
 
 ```{r,message = FALSE}
 # Subset data for collisions during the day and at night
-collisions_day <- subset(data, Light == "DAYLIGHT")
-collisions_night <- subset(data, Light == "DARK LIGHTS ON")
+#collisions_day <- subset(data, Light == "DAYLIGHT")
+#collisions_night <- subset(data, Light == "DARK LIGHTS ON")
 
 # Get the counts of each vehicle type for day and night collisions
-counts_day <- table(collisions_day$Vehicle.Body.Type)
-counts_night <- table(collisions_night$Vehicle.Body.Type)
+#counts_day <- table(collisions_day$Vehicle.Body.Type)
+#counts_night <- table(collisions_night$Vehicle.Body.Type)
 
 # Perform chi-square test of independence
-chi_square_test <- chisq.test(counts_day, counts_night)
+#chi_square_test <- chisq.test(counts_day, counts_night)
 
 # Print the test results
 # print(chi_square_test)
+
+#**Interpretation of Results**: To analyze this, a Pearson's Chi-squared test was conducted comparing the counts of collisions involving different types of vehicles during the day and at night. The output indicates that there is no significant difference in the distribution of collisions across different types of vehicles between day and night, with a p-value of 0.2408. This suggests that the likelihood of different types of vehicles being involved in collisions is similar during both day and night.
+
 ```
 
-</details>
 
-::: {style="text-align:justify"}
-**Interpretation of Results**: To analyze this, a Pearson's Chi-squared test was conducted comparing the counts of collisions involving different types of vehicles during the day and at night. The output indicates that there is no significant difference in the distribution of collisions across different types of vehicles between day and night, with a p-value of 0.2408. This suggests that the likelihood of different types of vehicles being involved in collisions is similar during both day and night.
-:::
 
 ## hypo#3. Do drivers distracted by electronic devices have a higher rate of collisions compared to drivers distracted by other factors?
 
@@ -636,63 +626,35 @@ The analysis aims to determine whether drivers distracted by electronic devices 
 
 **Chi-Square Test**: A chi-square test of independence is performed to assess whether there is a significant difference in collision rates between the two groups of drivers.
 
-![](images/11.png)
-
-<details>
-
-<summary>Code</summary>
-
-```{r,message = FALSE}
+```{r}
 # Subset the data for drivers distracted by electronic devices
-electronic_distracted <- subset(data, Driver.Distracted.By == "ELECTRONIC DEVICE")
+#electronic_distracted <- subset(data, Driver.Distracted.By == "ELECTRONIC DEVICE")
 
 # Subset the data for drivers distracted by other factors
-other_distracted <- subset(data, Driver.Distracted.By != "ELECTRONIC DEVICE" & Driver.Distracted.By != "NOT DISTRACTED")
+#other_distracted <- subset(data, Driver.Distracted.By != "ELECTRONIC DEVICE" & Driver.Distracted.By != "NOT DISTRACTED")
 
 # Count the number of collisions for each distraction type
-counts_electronic <- nrow(electronic_distracted)
-counts_other <- nrow(other_distracted)
+#counts_electronic <- nrow(electronic_distracted)
+#counts_other <- nrow(other_distracted)
 
 # Perform chi-square test
-chi_square_test <- chisq.test(c(counts_electronic, counts_other))
+# chi_square_test <- chisq.test(c(counts_electronic, counts_other))
 
 # Print the test results
 # print(chi_square_test)
+
+#**Interpretation of Results**: The question aims to determine if drivers distracted by electronic devices have a higher collision rate compared to those distracted by other factors. To analyze this, a Chi-squared test was conducted comparing the collision counts between drivers distracted by electronic devices and those distracted by other factors. The output indicates a significant difference between the two groups, with a very low p-value (p \< 2.2e-16). This suggests that drivers distracted by electronic devices indeed have a significantly higher collision rate compared to those distracted by other factors.
 ```
 
-</details>
 
-::: {style="text-align:justify"}
-**Interpretation of Results**: The question aims to determine if drivers distracted by electronic devices have a higher collision rate compared to those distracted by other factors. To analyze this, a Chi-squared test was conducted comparing the collision counts between drivers distracted by electronic devices and those distracted by other factors. The output indicates a significant difference between the two groups, with a very low p-value (p \< 2.2e-16). This suggests that drivers distracted by electronic devices indeed have a significantly higher collision rate compared to those distracted by other factors.
-:::
 
-<details>
 
+
+
+```{r}
 ## visualization2 : How does the distribution of car accidents vary geographically?
 
-```{r ,message = FALSE,echo=FALSE}
-library(leaflet)
-data <- read.csv('/Users/manoharshasappa/Desktop/Stat_Final_project de/CrashReportingDriversData.csv')
-data <- na.omit(data) 
-map <- leaflet(data) %>%
-  addTiles() %>%
-  addCircleMarkers(
-    lng = ~Longitude,
-    lat = ~Latitude,
-    popup = ~as.character(Report.Number),
-    label = ~as.character(Report.Number)
-  )
-
-# Print the map
-map
-```
-
-<details>
-
-<summary>Code</summary>
-
-```{r ,message = FALSE,echo=FALSE}
-#library(leaflet)
+# library(leaflet)
 #data <- read.csv('/Users/manoharshasappa/Desktop/Stat_Final_project de/CrashReportingDriversData.csv')
 #data <- na.omit(data) 
 #map <- leaflet(data) %>%
@@ -702,16 +664,15 @@ map
     #lat = ~Latitude,
     #popup = ~as.character(Report.Number),
     #label = ~as.character(Report.Number))
+
 # Print the map
 # map
+
+# -   Latitude and Longitude: These variables represent the geographical coordinates of the crash locations. They serve as predictor variables as they are used to specify the locations where circle markers will be placed on the map.
+
+# **Explanation of the Code:** This utilizes the Leaflet package in R to generate an interactive map. It begins by loading Leaflet and then initializes a map object. Using latitude and longitude data from a dataframe named 'data', it places circle markers on the map to represent specific locations, like crash sites. Each marker includes a popup and label showing the associated report number. Finally, it prints the interactive map, allowing users to explore the locations and corresponding report numbers within the R environment.
+
+
 ```
 
 </details>
-
-### **Columns used:**
-
--   Latitude and Longitude: These variables represent the geographical coordinates of the crash locations. They serve as predictor variables as they are used to specify the locations where circle markers will be placed on the map.
-
-::: {style="text-align:justify"}
-**Explanation of the Code:** This utilizes the Leaflet package in R to generate an interactive map. It begins by loading Leaflet and then initializes a map object. Using latitude and longitude data from a dataframe named 'data', it places circle markers on the map to represent specific locations, like crash sites. Each marker includes a popup and label showing the associated report number. Finally, it prints the interactive map, allowing users to explore the locations and corresponding report numbers within the R environment.
-:::
